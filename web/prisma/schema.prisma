@@ -25,18 +25,9 @@ model Materia {
   id              String   @id @default(uuid()) @map("_id")
   name            String
   descricao       String
+  cor             String
   slug            String   @unique
-
-  materiaTopico   MateriaTopico[]
-}
-
-model MateriaTopico {
-  id              String   @id @default(uuid()) @map("_id")
-  order           Int       @default(0) 
-  materia         Materia @relation(fields: [materiaId], references: [id])
-  materiaId       String
-  topico          Topico @relation(fields: [topicoId], references: [id])
-  topicoId        String
+  topicos         Topico[]
 }
 
 model Topico {
@@ -46,7 +37,8 @@ model Topico {
   slug            String    @unique
   archived        Boolean?  @default(false)
 
-  materiaTopico   MateriaTopico[]
+  materia         Materia @relation(fields: [materiaId], references: [id])
+  materiaId       String
   topicoLicoes    TopicoLicao[]  
 
   userProgress UserProgress[]
