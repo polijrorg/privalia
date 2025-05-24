@@ -8,13 +8,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  USER
+  ADMIN
+  SUPER_ADMIN
+  ESCOLA_PROFESSOR
+  ESCOLA_ADMIN
+}
+
 model User {
   id              String    @id @default(uuid()) @map("_id")
   name            String
   email           String    @unique
   emailVerified   DateTime?             
   image           String?               
-  role            String    @default("user")
+  role            Role     @default(USER)
 
   accounts        Account[]             
   sessions        Session[]             
