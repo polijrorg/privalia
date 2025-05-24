@@ -1,13 +1,15 @@
+
 import NextAuth from "next-auth"
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import prisma from "@/services/prisma";
 import Google from "next-auth/providers/google"
 import Credentials from "next-auth/providers/credentials"
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import prisma from "@/services/prisma";
+import { Role } from "@/generated/prisma";
 
-import { loginSchema } from "./lib/zod";
-import { ZodError } from "zod"
 import { getUserByEmail } from "./services/user";
 import { saltAndHashPassword } from "./services/password";
+import { ZodError } from "zod"
+import { loginSchema } from "./utils/zod";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -27,7 +29,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           
           user = await getUserByEmail(email, pwHash)
           
-          if (!user) {
+          if (!user) {       
             throw new Error("Invalid credentials.")
           }
         
@@ -36,6 +38,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           if (error instanceof ZodError) {
             return null
           }
+          return null;
         }
       },
     }),
@@ -43,13 +46,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     jwt({ token, user }) {
       if (user) {
-        token.role = user.role ?? 'USER';
+        token.role = user.role ?? Role.USER;
         token.id = user.id;
       };
       return token
     },
     session({ session, token }) {
-      session.user.role = token.role as string ?? 'user';
+      session.user.role = (token.role as Role) ?? Role.USER
       return session
     }
   }
