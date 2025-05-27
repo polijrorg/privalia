@@ -55,7 +55,7 @@ function LoginForm() {
           <Link href='/login/esqueceu-senha' className="colorTransition border-transparent border-b hover:border-gray-400">Esqueceu sua senha?</Link>
         </div>
 
-        <button type="submit" className="login-button mt-6 text-pink-50 colorTransition bg-pink-500 hover:bg-pink-400"><Mail />Entrar</button>
+        <button type="submit" disabled={loading} className="login-button mt-6 text-pink-50 colorTransition bg-pink-500 hover:bg-pink-400"><Mail />Entrar</button>
       </form>
       
       <div className="flex items-center gap-4 py-5">
