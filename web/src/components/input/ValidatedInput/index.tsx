@@ -75,7 +75,7 @@ function ValidatedInput({
       <div className={mergeClasses('relative inline-block', inputContainerClassName)}>
         <input
           {...rest}
-          className={mergeClasses('outline-none text-slate-900 placeholder:text-gray-400', inputClassName)}
+          className={mergeClasses('outline-none text-slate-900 placeholder:text-gray-500', inputClassName)}
           type={type}
           name={name}
           id={name}
@@ -84,7 +84,7 @@ function ValidatedInput({
         />
 
         {showValid !== null && (
-          <span className={mergeClasses(styles.icon_container + ' right-0', iconContainerClassName)}>
+          <span className={mergeClasses(styles.icon_container, iconContainerClassName)}>
             {showValid ? (
               <Check className={`${styles.icon} ${styles.icon_valid}`} />
             ) : (

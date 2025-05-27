@@ -9,7 +9,7 @@
   --color-pink-300: #E98BC2;
   --color-pink-400: #E55DB1;
   --color-pink-500: #E91695;
-  --color-pink-600: #A02274;
+  --color-pink-600: hsl(321, 65%, 40%);
   --color-pink-700: #6E1C53;
   --color-pink-800: #431931;
   --color-pink-900: #28101F;
@@ -23,6 +23,21 @@ body {
 ::selection {
   color: var(--color-pink-100);
   background-color: var(--color-pink-500);
+}
+
+@utility base-checkbox {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1px solid var(--color-gray-500);
+
+  transition: background-color .2s ease;
+  
+  @variant checked {
+    border-color: transparent;
+    background-color: var(--color-pink-400);
+  }
 }
 
 @utility login-background {
@@ -78,4 +93,26 @@ body {
   font-size: 16px;
   font-style: italic;
   margin-left: 4px;
+}
+
+@utility auth-label {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+@utility auth-input {
+  font-size: 16px;
+
+  background-color: var(--color-gray-100);
+  width: 100%;
+  padding: 12px 16px;
+
+  border: 1px solid var(--color-gray-400);
+  border-radius: 12px;
+  @variant focus {
+    border-color: var(--color-pink-400);
+  }
+}
+@utility auth-icon {
+  right: 8px;
 }
