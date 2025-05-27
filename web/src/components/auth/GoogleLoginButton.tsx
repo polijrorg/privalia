@@ -5,7 +5,13 @@ import { useSearchParams } from "next/navigation";
 import { isSafeRedirect } from "@/utils";
 import { signIn } from "next-auth/react";
 
-function GoogleLoginButton({ className }: { className?: string }) {
+import { ButtonHTMLAttributes } from "react";
+
+type GoogleLoginButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+  className?: string;
+};
+
+function GoogleLoginButton({ className, ...props }: GoogleLoginButtonProps) {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') ?? "/";
   const safeCallbackUrl = isSafeRedirect(callbackUrl) ? callbackUrl : "/";
@@ -19,7 +25,7 @@ function GoogleLoginButton({ className }: { className?: string }) {
       >
         <input type="hidden" name="type" value="google" />
 
-        <button type="submit" className='login-button tracking-4'>
+        <button type="submit" className='login-button tracking-4' {...props}>
             <Image
               src={`/icons/google-logo.png`}
               alt={`Google logo`}
