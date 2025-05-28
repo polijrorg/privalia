@@ -2,11 +2,11 @@ import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
 import Credentials from "next-auth/providers/credentials"
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import prisma from "@/services/prisma";
+import prisma from "@/services/db";
 import { Role } from "@/generated/prisma";
 
-import { getUserByEmail } from "./services/user";
-import { saltAndHashPassword } from "./services/password";
+import { getUserByEmail } from "./services/auth/user";
+import { saltAndHashPassword } from "./services/auth/password";
 import { ZodError } from "zod"
 import { loginSchema } from "./utils/zod";
 

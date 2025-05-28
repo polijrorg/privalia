@@ -12,7 +12,7 @@
   --color-pink-600: hsl(321, 65%, 40%);
   --color-pink-700: #6E1C53;
   --color-pink-800: #431931;
-  --color-pink-900: #28101F;
+  --color-pink-900: hsl(321, 30%, 11%);
   --color-pink-950: #12080E;
 }
 

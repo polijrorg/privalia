@@ -1,4 +1,4 @@
-import Noctiluz from '@/svgs/noctiluz.svg'
+import Noctiluz from '@/components/svgs/noctiluz.svg'
 import LoginForm from './LoginForm';
 
 function LoginPage() {

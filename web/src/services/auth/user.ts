@@ -1,5 +1,5 @@
 import { comparePassword } from "./password";
-import prisma from "./prisma";
+import prisma from "../db";
 
 export async function getUserByEmail(email: string, plainPassword: string) {
   const user = await prisma.user.findUnique({ where: { email } });

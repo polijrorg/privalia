@@ -1,2 +1,2 @@
-export { isSafeRedirect } from "./validation";
-export { mergeClasses } from './styles'
+export { isSafeRedirect } from "./validations";
+export { mergeClasses } from './helpers';
