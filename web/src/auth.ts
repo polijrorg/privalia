@@ -6,7 +6,6 @@ import prisma from "@/services/db";
 import { Role } from "@/generated/prisma";
 
 import { getUserByEmail } from "./services/auth/user";
-import { saltAndHashPassword } from "./services/auth/password";
 import { ZodError } from "zod"
 import { loginSchema } from "./utils/zod";
 
@@ -22,12 +21,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         try {
           let user = null
  
-          const { email, password } = await loginSchema.parseAsync(credentials)
+          const { email, password } = await loginSchema.parseAsync(credentials);
 
-          const pwHash = await saltAndHashPassword(password)
-          
-          user = await getUserByEmail(email, pwHash)
-          
+          user = await getUserByEmail(email, password);
+
           if (!user) {       
             throw new Error("Invalid credentials.")
           }

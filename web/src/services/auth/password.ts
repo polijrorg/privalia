@@ -1,7 +1,8 @@
 import { hash, compare } from "bcryptjs";
 
 export async function saltAndHashPassword(plainPassword: string): Promise<string> {
-  const SALT_ROUNDS = 10;
+  const env = process.env.BCRYPT_SALT_ROUNDS;
+  const SALT_ROUNDS = env ? parseInt(env) : 10;
   return await hash(plainPassword, SALT_ROUNDS);
 }
 
