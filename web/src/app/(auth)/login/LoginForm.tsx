@@ -2,22 +2,16 @@
 import Link from "next/link";
 import { Mail } from "lucide-react";
 import { useState, useEffect } from "react";
-import { signIn } from "next-auth/react"
 
-import GoogleLoginButton from "@/components/auth/GoogleLoginButton";
+import GoogleAuthButton from "@/components/auth/GoogleLoginButton";
 import RequiredTag from "@/components/input/RequiredTag";
 import ValidatedInput from "@/components/input/ValidatedInput";
+import { loginAction } from "@/services/actions";
 
 function LoginForm() {
   const [loading, setLoading] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const credentialsAction = (formData: FormData) => {
-    const email = formData.get('email') as string;
-    const password = formData.get('password') as string;
-    signIn("credentials", { email, password });
-  }
 
   useEffect(() => {
     setLoading(false);
@@ -26,7 +20,7 @@ function LoginForm() {
   return ( 
     <div className="lg:w-[90%] xl:w-[80%]">
       <h2 className="font-bold text-[40px] text-center leading-12">Continue seu aprendizado</h2>
-      <form className="mt-6" action={credentialsAction}>
+      <form className="mt-6" action={loginAction}>
         <ValidatedInput 
           title="E-mail"
           placeholder="exemplo@noctiluz.com.br"
@@ -70,7 +64,7 @@ function LoginForm() {
         <div className="flex-grow h-0.5 bg-gray-400" />
       </div>
 
-      <GoogleLoginButton disabled={loading} />
+      <GoogleAuthButton disabled={loading} text="Entrar com Google" />
 
       <Link href='/cadastro' className="block w-fit mt-8 text-sm group">Ainda não tem uma conta? <span className="text-pink-500 colorTransition border-b border-transparent group-hover:border-pink-500">Cadastre-se</span></Link>
     </div>

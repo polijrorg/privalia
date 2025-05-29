@@ -44,7 +44,7 @@ function ValidatedInput({
 
   const validate = overrideValidate ?? ((val: string) => {
     if (type === 'email') return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
-    if (type === 'password') return /^(?=.*[A-Za-z])(?=.*\d).{6,}$/.test(val);
+    if (type === 'password') return /^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(val);
     if (type === 'phone') return /^\+?[1-9]\d{1,14}$/.test(val);
     if (type === 'text') return val.trim().length >= 1;
     return true;

@@ -10,7 +10,7 @@ function LoginPage() {
 
       <div className="login-background h-full w-[45%] flex flex-col items-center py-32">
         <div className="text-pink-500 flex gap-4">
-          <Noctiluz className="" />
+          <Noctiluz className="w-[115px]" />
           <h1 className='font-bold text-[64px]'>noctiluz</h1>
         </div>
       </div>

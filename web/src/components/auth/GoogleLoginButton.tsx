@@ -7,11 +7,12 @@ import { signIn } from "next-auth/react";
 
 import { ButtonHTMLAttributes } from "react";
 
-type GoogleLoginButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+type GoogleAuthButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   className?: string;
+  text?: string;
 };
 
-function GoogleLoginButton({ className, ...props }: GoogleLoginButtonProps) {
+function GoogleAuthButton({ className, text, ...props }: GoogleAuthButtonProps) {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') ?? "/";
   const safeCallbackUrl = isSafeRedirect(callbackUrl) ? callbackUrl : "/";
@@ -33,10 +34,10 @@ function GoogleLoginButton({ className, ...props }: GoogleLoginButtonProps) {
               height={24}
             />
 
-          Entrar com Google
+          {text}
         </button>
       </form>
     );
 }
 
-export default GoogleLoginButton;
+export default GoogleAuthButton;
