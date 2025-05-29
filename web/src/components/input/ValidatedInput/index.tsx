@@ -1,13 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Check, X } from 'lucide-react';
 import styles from './input.module.css';
-import { mergeClasses } from '@/utils';
+import { mergeClasses, validateEmail } from '@/utils';
 import type { InputHTMLAttributes } from 'react';
 
 interface ValidatedInputProps extends InputHTMLAttributes<HTMLInputElement> {
   title: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  dependencies?: any[];
   setValue?: (value: any) => void;
   overrideValidate?: (value: string) => boolean;
   isValid?: boolean | null;
@@ -24,6 +25,7 @@ function ValidatedInput({
   title,
   name,
   value,
+  dependencies,
   setValue,
   overrideValidate,
   isValid: externallyControlledValid,
@@ -43,12 +45,20 @@ function ValidatedInput({
   const isControlled = value !== undefined && setValue !== undefined;
 
   const validate = overrideValidate ?? ((val: string) => {
-    if (type === 'email') return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+    if (type === 'email') return validateEmail(val);
     if (type === 'password') return /^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(val);
     if (type === 'phone') return /^\+?[1-9]\d{1,14}$/.test(val);
     if (type === 'text') return val.trim().length >= 1;
     return true;
   });
+
+  useEffect(() => {
+    if (dependencies && (inputCurrentValue || inputCurrentValue === '')) {
+      const valid = validate(String(inputCurrentValue));
+      setInternalValid(valid);
+      onValidChange?.(valid);
+    }
+  }, [dependencies]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVal = e.target.value;
