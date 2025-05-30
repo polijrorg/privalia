@@ -1,6 +1,5 @@
 'use client'
 import Link from "next/link";
-import { Mail } from "lucide-react";
 import { useState, useEffect } from "react";
 
 import PasswordRequirement from "./PasswordRequirement";
@@ -12,6 +11,7 @@ import { hasLowercase, hasMinLength, hasNumber, hasUppercase, validatePassword, 
 
 import { toast } from "react-hot-toast";
 import { redirect } from "next/navigation";
+import CredentialsButton from "@/components/auth/CredentialsButton";
 
 function CadastroForm() {
   const [loading, setLoading] = useState(true);
@@ -76,6 +76,7 @@ function CadastroForm() {
               labelClassName='auth-label'
               inputClassName='auth-input'
               iconContainerClassName="auth-icon"
+              required
             ><RequiredTag/></ValidatedInput>
             <ValidatedInput
               title="E-mail"
@@ -87,6 +88,7 @@ function CadastroForm() {
               labelClassName='auth-label'
               inputClassName='auth-input'
               iconContainerClassName="auth-icon"
+              required
             ><RequiredTag/></ValidatedInput>
             <ValidatedInput
               title="Senha"
@@ -99,6 +101,7 @@ function CadastroForm() {
               labelClassName="auth-label"
               inputClassName="auth-input"
               iconContainerClassName="auth-icon"
+              required
             ><RequiredTag/></ValidatedInput>
             <ValidatedInput
               title="Confirmar Senha"
@@ -112,6 +115,7 @@ function CadastroForm() {
               labelClassName="auth-label"
               inputClassName="auth-input"
               iconContainerClassName="auth-icon"
+              required
             ><RequiredTag/></ValidatedInput>
             <p>
               Senha deve ter pelo menos:
@@ -134,7 +138,7 @@ function CadastroForm() {
               />
             </p>
           </div>
-          <button type="submit" disabled={loading} className="login-button mt-6 text-pink-50 colorTransition bg-pink-500 hover:bg-pink-400"><Mail />Cadastro</button>
+          <CredentialsButton disabled={loading} className="mt-6">Cadastro</CredentialsButton>
         </form>
         
         <Link href='/login' className="block w-fit mt-8 text-sm group">Já tem uma conta? <span className="text-pink-500 colorTransition border-b border-transparent group-hover:border-pink-500">Login</span></Link>

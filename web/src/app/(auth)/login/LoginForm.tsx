@@ -1,10 +1,11 @@
 'use client'
 import Link from "next/link";
-import { Mail } from "lucide-react";
 import { useState, useEffect } from "react";
 
 import LoginOptionals from "@/components/auth/LoginOptionals";
+import CredentialsButton from "@/components/auth/CredentialsButton";
 import GoogleAuthButton from "@/components/auth/GoogleLoginButton";
+
 import RequiredTag from "@/components/input/RequiredTag";
 import ValidatedInput from "@/components/input/ValidatedInput";
 import { loginAction } from "@/services/actions";
@@ -32,6 +33,7 @@ function LoginForm() {
           labelClassName='auth-label'
           inputClassName='auth-input'
           iconContainerClassName="auth-icon"
+          required
         ><RequiredTag/></ValidatedInput>
         
         <ValidatedInput 
@@ -45,11 +47,12 @@ function LoginForm() {
           labelClassName="auth-label"
           inputClassName="auth-input"
           iconContainerClassName="auth-icon"
+          required
         ><RequiredTag/></ValidatedInput>
 
         <LoginOptionals />
 
-        <button type="submit" disabled={loading} className="login-button mt-6 text-pink-50 colorTransition bg-pink-500 hover:bg-pink-400"><Mail />Entrar</button>
+        <CredentialsButton className="mt-6" disabled={loading}>Entrar</CredentialsButton>
       </form>
       
       <div className="flex items-center gap-4 py-5">
