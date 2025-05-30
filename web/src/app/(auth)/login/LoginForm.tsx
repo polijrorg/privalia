@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Mail } from "lucide-react";
 import { useState, useEffect } from "react";
 
+import LoginOptionals from "@/components/auth/LoginOptionals";
 import GoogleAuthButton from "@/components/auth/GoogleLoginButton";
 import RequiredTag from "@/components/input/RequiredTag";
 import ValidatedInput from "@/components/input/ValidatedInput";
@@ -46,14 +47,7 @@ function LoginForm() {
           iconContainerClassName="auth-icon"
         ><RequiredTag/></ValidatedInput>
 
-        <div className="mt-4 flex items-center justify-between text-gray-500 text-sm">
-          <div className="flex items-center gap-2">
-            <input type="checkbox" name="remember" id="remember" className="base-checkbox" />
-            <label htmlFor="remember" className="leading-4">Lembrar de mim</label>
-          </div>
-
-          <Link href='/login/esqueceu-senha' className="colorTransition border-transparent border-b hover:border-gray-400">Esqueceu sua senha?</Link>
-        </div>
+        <LoginOptionals />
 
         <button type="submit" disabled={loading} className="login-button mt-6 text-pink-50 colorTransition bg-pink-500 hover:bg-pink-400"><Mail />Entrar</button>
       </form>
