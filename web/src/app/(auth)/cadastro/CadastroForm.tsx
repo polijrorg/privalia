@@ -1,0 +1,146 @@
+'use client'
+import Link from "next/link";
+import { Mail } from "lucide-react";
+import { useState, useEffect } from "react";
+
+import PasswordRequirement from "./PasswordRequirement";
+import GoogleAuthButton from "@/components/auth/GoogleLoginButton";
+import RequiredTag from "@/components/input/RequiredTag";
+import ValidatedInput from "@/components/input/ValidatedInput";
+import { registerAction } from "@/services/actions";
+import { hasLowercase, hasMinLength, hasNumber, hasUppercase, validatePassword, validateConfirmPassword } from "@/utils";
+
+import { toast } from "react-hot-toast";
+import { redirect } from "next/navigation";
+
+function CadastroForm() {
+  const [loading, setLoading] = useState(true);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const credentialsAction = async (formData: FormData) => {
+    let data;
+    try {
+      setLoading(true);
+      
+      data = await registerAction(formData);
+      
+      if (data.error) {
+        throw new Error("Erro inesperado");
+      }
+
+      toast.success(`Bem-vindo(a), ${data.user.name}`);
+    } catch (error: unknown) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      toast.error((error as any).message ?? String(error));
+    } finally {
+      setLoading(false);
+    }
+
+    if (!data.error) {
+      setTimeout(() => {
+        redirect('/')
+      }, 1000);
+    };
+  }
+
+  useEffect(() => {
+    setLoading(false);
+  }, []);
+
+  return ( 
+    <div className="flex items-center justify-center">
+      <div className="pt-6 mb-12 px-2">
+        <h2 className="font-bold text-[40px] text-center leading-12">Aprenda se divertindo!</h2>
+        <p className="text-gray-500 pt-1 mb-8">Lições, exercícios, simulações e muita interatividade customizados <b>da forma que você preferir</b></p>
+        
+        <GoogleAuthButton disabled={loading} text="Cadastro com Google" />
+
+        <div className="flex items-center gap-4 py-5">
+          <div className="flex-grow h-0.5 bg-gray-400" />
+          <p className="text-gray-400 text-lg">ou</p>
+          <div className="flex-grow h-0.5 bg-gray-400" />
+        </div>
+
+        <form className="" action={credentialsAction}>
+          <div className="flex flex-col gap-4">
+            <ValidatedInput
+              title="Nome"
+              placeholder="Vagalume da Silva"
+              name="name"
+              type="text"
+              value={name}
+              setValue={setName}
+              labelClassName='auth-label'
+              inputClassName='auth-input'
+              iconContainerClassName="auth-icon"
+            ><RequiredTag/></ValidatedInput>
+            <ValidatedInput
+              title="E-mail"
+              placeholder="exemplo@noctiluz.com.br"
+              name="email"
+              type="email"
+              value={email}
+              setValue={setEmail}
+              labelClassName='auth-label'
+              inputClassName='auth-input'
+              iconContainerClassName="auth-icon"
+            ><RequiredTag/></ValidatedInput>
+            <ValidatedInput
+              title="Senha"
+              placeholder="Insira sua senha"
+              name="password"
+              type="password"
+              value={password}
+              setValue={setPassword}
+              overrideValidate={validatePassword}
+              labelClassName="auth-label"
+              inputClassName="auth-input"
+              iconContainerClassName="auth-icon"
+            ><RequiredTag/></ValidatedInput>
+            <ValidatedInput
+              title="Confirmar Senha"
+              placeholder="Confirme sua senha"
+              name="confirmPassword"
+              type="password"
+              dependencies={[password]}
+              value={confirmPassword}
+              setValue={setConfirmPassword}
+              overrideValidate={(val) => validateConfirmPassword(val, password)}
+              labelClassName="auth-label"
+              inputClassName="auth-input"
+              iconContainerClassName="auth-icon"
+            ><RequiredTag/></ValidatedInput>
+            <p>
+              Senha deve ter pelo menos:
+              
+              <PasswordRequirement 
+                text="1 letra maiúscula"
+                validateFunction={() => hasUppercase(password)}
+              />
+              <PasswordRequirement 
+                text="1 letra minúscula"
+                validateFunction={() => hasLowercase(password)}
+              />
+              <PasswordRequirement 
+                text="1 número"
+                validateFunction={() => hasNumber(password)}
+              />
+              <PasswordRequirement 
+                text="8 caracteres"
+                validateFunction={() => hasMinLength(password)}
+              />
+            </p>
+          </div>
+          <button type="submit" disabled={loading} className="login-button mt-6 text-pink-50 colorTransition bg-pink-500 hover:bg-pink-400"><Mail />Cadastro</button>
+        </form>
+        
+        <Link href='/login' className="block w-fit mt-8 text-sm group">Já tem uma conta? <span className="text-pink-500 colorTransition border-b border-transparent group-hover:border-pink-500">Login</span></Link>
+      </div>
+    </div>
+   );
+}
+
+export default CadastroForm;
