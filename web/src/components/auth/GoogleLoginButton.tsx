@@ -5,9 +5,10 @@ import { useSearchParams } from "next/navigation";
 import { isSafeRedirect } from "@/utils";
 import { signIn } from "next-auth/react";
 
-import { ButtonHTMLAttributes } from "react";
+import { HTMLMotionProps } from "motion/react";
+import BaseMotionButton from "../common/BaseMotionButton";
 
-type GoogleAuthButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+type GoogleAuthButtonProps = HTMLMotionProps<"button"> & {
   className?: string;
   text?: string;
 };
@@ -26,7 +27,7 @@ function GoogleAuthButton({ className, text, ...props }: GoogleAuthButtonProps) 
       >
         <input type="hidden" name="type" value="google" />
 
-        <button type="submit" className='login-button tracking-4' {...props}>
+        <BaseMotionButton type="submit" className='login-button tracking-4' {...props}>
             <Image
               src={`/icons/google-logo.png`}
               alt={`Google logo`}
@@ -35,7 +36,7 @@ function GoogleAuthButton({ className, text, ...props }: GoogleAuthButtonProps) 
             />
 
           {text}
-        </button>
+        </BaseMotionButton>
       </form>
     );
 }

@@ -1,15 +1,22 @@
 import { mergeClasses } from "@/utils";
-import { Mail } from "lucide-react";
-import { ButtonHTMLAttributes, ReactNode } from "react";
+import { ReactNode } from "react";
 
-type BaseButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
+import { type HTMLMotionProps } from "motion/react";
+import MotionButton from "../common/BaseMotionButton";
+import { Mail } from "lucide-react";
+
+type BaseButtonProps = HTMLMotionProps<"button">;
 
 function CredentialsButton({ children, className, ...props }: BaseButtonProps & { children: ReactNode, className?: string }) {
   return ( 
-    <button type="submit" className={mergeClasses("login-button text-pink-50 colorTransition bg-pink-500 hover:bg-pink-400", className)} {...props}>
-      <Mail />
+    <MotionButton 
+      type="submit" 
+      className={mergeClasses("login-button relative text-pink-50 bg-pink-500", className)}
+      {...props}
+    >
+      <Mail className="w-[26px] h-[26px]" />
       {children}
-    </button>
+    </MotionButton>
    );
 }
 
