@@ -1,0 +1,14 @@
+{
+  "name": "noctiluz-monorepo",
+  "private": true,
+  "workspaces": [
+    "web",
+    "bruno"
+  ],
+  "devDependencies": {
+    "husky": "^9.1.7"
+  },
+  "scripts": {
+    "prepare": "husky"
+  }
+}
