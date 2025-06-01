@@ -16,14 +16,12 @@ describe('/api/materias - getAllMaterias', () => {
       { 
         id: 1, 
         name: 'Matemática', 
-        codigo: 'MAT001',
         createdAt: new Date('2024-01-01'),
         updatedAt: new Date('2024-01-01')
       },
       { 
         id: 2, 
         name: 'Português', 
-        codigo: 'POR001',
         createdAt: new Date('2024-01-01'),
         updatedAt: new Date('2024-01-01')
       },
@@ -45,13 +43,10 @@ describe('/api/materias - getAllMaterias', () => {
   })
 
   it('should return empty array when no materias exist', async () => {
-    // Arrange
     mockCtx.prisma.materia.findMany.mockResolvedValue([])
 
-    // Act
     const result = await getAllMaterias(ctx)
 
-    // Assert
     expect(result).toEqual([])
     expect(mockCtx.prisma.materia.findMany).toHaveBeenCalledTimes(1)
   })
@@ -67,11 +62,10 @@ describe('/api/materias - getAllMaterias', () => {
   })
 
   it('should order materias by name ascending', async () => {
-    // Arrange
     const mockMaterias = [
-      { id: 1, name: 'Física', codigo: 'FIS001' },
-      { id: 2, name: 'Matemática', codigo: 'MAT001' },
-      { id: 3, name: 'Química', codigo: 'QUI001' },
+      { id: 1, name: 'Física' },
+      { id: 2, name: 'Matemática' },
+      { id: 3, name: 'Química' },
     ]
     
     mockCtx.prisma.materia.findMany.mockResolvedValue(mockMaterias)
