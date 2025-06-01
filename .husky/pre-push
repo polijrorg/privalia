@@ -4,7 +4,8 @@ CHANGED_FILES=$(git diff --name-only origin/$(git rev-parse --abbrev-ref HEAD))
 # Check if any staged file is under the web/ folder
 if echo "$CHANGED_FILES" | grep -q "^web/"; then
   echo "Detected changes in /web. Running lint and tests..."
-  npm run test --workspace=web
+  pnpm --filter web build
+  pnpm --filter web test
 else
   echo "No changes in /web. Skipping web lint/test."
 fi
