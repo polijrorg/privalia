@@ -1,4 +1,4 @@
-import { emailSchema, passwordSchema } from "../zod";
+import { emailSchema, passwordSchema } from "@/backend/schemas";
 
 export const validateEmail = (value: string) => {
   try {

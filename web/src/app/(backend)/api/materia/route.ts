@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server'
-import prisma from '@/services/db'
-import { createMateria, getAllMaterias } from '@/services/api/materia'
 import { auth } from '@/auth';
-import { createMateriaSchema } from '@/utils/zod/materia.schema';
+import prisma from '@/backend/services/db'
+import { createMateria, getAllMaterias } from '@/backend/services/materia'
+import { createMateriaSchema } from '@/backend/schemas';
 import { zodErrorHandler } from '@/utils';
 
 const allowedRoles = {

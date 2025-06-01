@@ -1,13 +1,14 @@
 import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
 import Credentials from "next-auth/providers/credentials"
+
+import prisma from "@/backend/services/db";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import prisma from "@/services/db";
 import { Role } from "@/generated/prisma";
 
-import { getUserByEmail } from "./services/auth/user";
+import { getUserByEmail } from "@/backend/services/auth";
 import { ZodError } from "zod"
-import { loginSchema } from "./utils/zod";
+import { loginSchema } from "@/backend/schemas";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),

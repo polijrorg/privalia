@@ -6,7 +6,7 @@ import PasswordRequirement from "./PasswordRequirement";
 import GoogleAuthButton from "@/components/auth/GoogleLoginButton";
 import RequiredTag from "@/components/input/RequiredTag";
 import ValidatedInput from "@/components/input/ValidatedInput";
-import { registerAction } from "@/services/actions";
+import { registerAction } from "@/actions";
 import { hasLowercase, hasMinLength, hasNumber, hasUppercase, validatePassword, validateConfirmPassword } from "@/utils";
 
 import { toast } from "react-hot-toast";

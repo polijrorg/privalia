@@ -8,7 +8,7 @@ import GoogleAuthButton from "@/components/auth/GoogleLoginButton";
 
 import RequiredTag from "@/components/input/RequiredTag";
 import ValidatedInput from "@/components/input/ValidatedInput";
-import { loginAction } from "@/services/actions";
+import { loginAction } from "@/actions";
 
 function LoginForm() {
   const [loading, setLoading] = useState(true);

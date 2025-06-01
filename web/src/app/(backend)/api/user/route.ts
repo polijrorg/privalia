@@ -1,8 +1,9 @@
-import { saltAndHashPassword } from "@/services/auth/password";
-import prisma from "@/services/db";
-import { zodErrorHandler } from "@/utils/api";
-import { registerSchema } from "@/utils/zod";
 import { NextRequest, NextResponse } from "next/server";
+
+import { saltAndHashPassword } from "@/backend/services/auth";
+import prisma from "@/backend/services/db";
+import { registerSchema } from "@/backend/schemas";
+import { zodErrorHandler } from "@/utils/api";
 
 export async function POST(req: NextRequest) {
   try {
