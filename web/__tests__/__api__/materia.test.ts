@@ -1,5 +1,5 @@
 import { MockContext, Context, createMockContext } from '@/context'
-import { getAllMaterias } from '@/services/api/materia'
+import { getAllMaterias } from '@/backend/services/materia'
 
 let mockCtx: MockContext
 let ctx: Context
@@ -14,16 +14,18 @@ describe('/api/materias - getAllMaterias', () => {
     // Arrange
     const mockMaterias = [
       { 
-        id: 1, 
+        id: '1', 
         name: 'Matemática', 
-        createdAt: new Date('2024-01-01'),
-        updatedAt: new Date('2024-01-01')
+        descricao: 'Matéria de matemática',
+        cor: '#FF0000',
+        slug: 'matematica'
       },
       { 
-        id: 2, 
+        id: '2', 
         name: 'Português', 
-        createdAt: new Date('2024-01-01'),
-        updatedAt: new Date('2024-01-01')
+        descricao: 'Matéria de português',
+        cor: '#00FF00',
+        slug: 'portugues'
       },
     ]
     
@@ -59,14 +61,14 @@ describe('/api/materias - getAllMaterias', () => {
     // Act & Assert
     await expect(getAllMaterias(ctx)).rejects.toThrow('Error: Database connection failed')
     expect(mockCtx.prisma.materia.findMany).toHaveBeenCalledTimes(1)
-  })
 
-  it('should order materias by name ascending', async () => {
     const mockMaterias = [
-      { id: 1, name: 'Física' },
-      { id: 2, name: 'Matemática' },
-      { id: 3, name: 'Química' },
+      { id: '1', name: 'Física', descricao: 'Matéria de física', cor: '#0000FF', slug: 'fisica' },
+      { id: '2', name: 'Matemática', descricao: 'Matéria de matemática', cor: '#FF0000', slug: 'matematica' },
+      { id: '3', name: 'Química', descricao: 'Matéria de química', cor: '#00FFFF', slug: 'quimica' },
     ]
+    
+    mockCtx.prisma.materia.findMany.mockResolvedValue(mockMaterias)
     
     mockCtx.prisma.materia.findMany.mockResolvedValue(mockMaterias)
 

@@ -11,7 +11,10 @@ const config: Config = {
   coverageProvider: 'v8',
   testEnvironment: 'jsdom',
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',  // ← Aqui o Jest entende `@/` como `src/`
+    '^@/backend/(.*)$': '<rootDir>/src/app/(backend)/$1', // e aqui @/backend como @/src/app/(backend)
+    '^@/frontend/(.*)$': '<rootDir>/src/app/(frontend)/$1', // para simplificar os imports assim como o tsconfig
+    '^@/(.*)$': '<rootDir>/src/$1', // ← Aqui o Jest entende `@/` como `src/` (DEVE VIR POR ULTIMO)
+    // já que ele reconhece todas as rotas de 
   },
   // Add more setup options before each test is run
   // setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
