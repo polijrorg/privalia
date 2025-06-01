@@ -19,10 +19,32 @@
 body {
   font-family: var(--font-rubik), Tahoma, Geneva, Verdana, sans-serif;
   background-color: var(--color-pink-50);
+  overflow-x: hidden;
 }
 ::selection {
   color: var(--color-pink-100);
   background-color: var(--color-pink-500);
+}
+
+@utility button-md {
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 24px;
+
+  border-width: 1px 1px 3px;
+  border-style: solid;
+  border-color: var(--color-pink-900);
+  border-radius: 16px;
+}
+@utility button-lg {
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 32px;
+
+  border-width: 1px 1px 3px;
+  border-style: solid;
+  border-color: var(--color-pink-900);
+  border-radius: 20px;
 }
 
 @utility login-background {
