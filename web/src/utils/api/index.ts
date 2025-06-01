@@ -2,7 +2,7 @@ import { ZodError } from "zod";
 import { NextResponse } from "next/server";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function baseErrorHandler(error: any) {
+export function zodErrorHandler(error: any) {
   if (error instanceof ZodError) {
     const fieldErrors = error.errors.reduce((acc, err) => {
       const field = err.path[0];

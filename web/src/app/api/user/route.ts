@@ -1,6 +1,6 @@
 import { saltAndHashPassword } from "@/services/auth/password";
 import prisma from "@/services/db";
-import { baseErrorHandler } from "@/utils/api";
+import { zodErrorHandler } from "@/utils/api";
 import { registerSchema } from "@/utils/zod";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -48,6 +48,6 @@ export async function POST(req: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
-    return baseErrorHandler(error);    
+    return zodErrorHandler(error);    
   }
 }
