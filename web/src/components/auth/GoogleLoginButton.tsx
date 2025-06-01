@@ -1,7 +1,7 @@
 'use client'
 import clsx from "clsx";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
+// import { useSearchParams } from "next/navigation";
 import { isSafeRedirect } from "@/utils";
 import { signIn } from "next-auth/react";
 
@@ -14,8 +14,9 @@ type GoogleAuthButtonProps = HTMLMotionProps<"button"> & {
 };
 
 function GoogleAuthButton({ className, text, ...props }: GoogleAuthButtonProps) {
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') ?? "/";
+  // const searchParams = useSearchParams();
+  // const callbackUrl = searchParams.get('callbackUrl') ?? "/";
+  const callbackUrl = "/";
   const safeCallbackUrl = isSafeRedirect(callbackUrl) ? callbackUrl : "/";
   
   return ( 
