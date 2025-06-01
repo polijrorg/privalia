@@ -6,5 +6,10 @@
   },
   "scripts": {
     "prepare": "husky"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+        "@prisma/client"
+    ]
   }
 }

@@ -36,7 +36,7 @@ importers:
         specifier: ^12.15.0
         version: 12.15.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       next:
-        specifier: ^15.3.2
+        specifier: ^15.3.3
         version: 15.3.3(@babel/core@7.27.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       next-auth:
         specifier: ^5.0.0-beta.27
