@@ -1,18 +1,17 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@/auth';
-import prisma from '@/backend/services/db'
 import { createMateria, getAllMaterias } from '@/backend/services/materia'
 import { createMateriaSchema } from '@/backend/schemas';
-import { zodErrorHandler } from '@/utils';
+import { blockForbiddenRequests, validBody, zodErrorHandler } from '@/utils';
+import type { AllowedRoutes } from '@/types';
 
-const allowedRoles = {
+const allowedRoles: AllowedRoutes = {
   POST: ["SUPER_ADMIN", "ADMIN"]
 }
 
 export async function GET() {
   try {
-    const ctx = { prisma }
-    const materias = await getAllMaterias(ctx)
+    const materias = await getAllMaterias()
 
     return NextResponse.json(materias, { status: 200 })
   } catch (error) {
@@ -26,32 +25,9 @@ export async function GET() {
 
 export const POST = auth(async (request) => {
   try {
-    if (!request.auth) {
-      return NextResponse.json(
-        { error: 'Não autorizado - Faça login para continuar' },
-        { status: 401 }
-      )
-    }
-    
-    const userRole = request.auth.user?.role;
-    
-    if (!userRole || !allowedRoles.POST.includes(userRole)) {
-      return NextResponse.json(
-        { error: 'Acesso negado - Permissões insuficientes' },
-        { status: 403 }
-      )
-    }
+    blockForbiddenRequests(request, allowedRoles.POST);
 
-    let body;
-    try {
-      body = await request.json()
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (e) {
-      return NextResponse.json(
-        { error: 'Formato de dados inválido - JSON malformado' },
-        { status: 400 }
-      )
-    }
+    const body = validBody(request);
 
     const validationResult = createMateriaSchema.safeParse(body)
     
@@ -72,8 +48,7 @@ export const POST = auth(async (request) => {
 
     const validatedData = validationResult.data
 
-    const ctx = { prisma }
-    const materia = await createMateria(ctx, validatedData)
+    const materia = await createMateria(validatedData)
 
     return NextResponse.json(materia, { status: 201 })
   } catch (error) {

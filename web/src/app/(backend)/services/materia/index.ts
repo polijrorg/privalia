@@ -1,8 +1,8 @@
-import { Context } from '@/context'
+import prisma from '../db';
 
-export async function getAllMaterias(ctx: Context) {
+export async function getAllMaterias() {
   try {
-    const materias = await ctx.prisma.materia.findMany({
+    const materias = await prisma.materia.findMany({
       orderBy: {
         name: 'asc'
       }
@@ -13,14 +13,14 @@ export async function getAllMaterias(ctx: Context) {
   }
 }
 
-export async function createMateria(ctx: Context, data: { 
+export async function createMateria(data: { 
   name: string; 
   descricao: string; 
   cor: string; 
   slug: string; 
 }) {
   try {
-    const materia = await ctx.prisma.materia.create({
+    const materia = await prisma.materia.create({
       data: {
         name: data.name,
         descricao: data.descricao,
