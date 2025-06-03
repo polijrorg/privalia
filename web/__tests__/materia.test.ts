@@ -3,22 +3,14 @@ import * as materiaService from '@/backend/services/materia'
 import { GET, POST } from '@/backend/api/materia/route'
 import { NextRequest } from 'next/server'
 import { getMateriasMock, postMateriaMock } from './mocks/materia'
-
-let currentRole: 'ADMIN' | 'SUPER_ADMIN' | 'USER' | null = 'ADMIN';
-
-const getCurrentRole = () => 
-  currentRole ? { user: { role: currentRole } } : null;
-
-export const setCurrentRole = (role: 'ADMIN' | 'SUPER_ADMIN' | 'USER' | null) => {
-  currentRole = role;
-};
+import { getCurrentAuth, setCurrentRole } from './mocks/auth'
 
 vi.mock('@/auth', () => ({
   auth: vi.fn().mockImplementation((handler) =>
     (req: NextRequest, ctx: any) => {
       const newReq = req;
-      (newReq as any).auth = getCurrentRole();
-      return handler(newReq, ctx)
+      (newReq as any).auth = getCurrentAuth();
+      return handler(newReq, ctx);
     }
   ),
 }));
