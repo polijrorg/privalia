@@ -1,15 +1,8 @@
 import z from "zod";
-import { slugSchema } from "./base.schema";
+import { nameSchema, corSchema, slugSchema } from "./base.schema";
 
 export const createMateriaSchema = z.object({
-  name: z
-    .string({
-      required_error: "Nome é obrigatório",
-      invalid_type_error: "Nome deve ser um texto"
-    })
-    .min(1, "Nome não pode estar vazio")
-    .max(100, "Nome não pode ter mais de 100 caracteres")
-    .trim(),
+  name: nameSchema,
   
   descricao: z
     .string({
@@ -20,13 +13,12 @@ export const createMateriaSchema = z.object({
     .max(500, "Descrição não pode ter mais de 500 caracteres")
     .trim(),
   
-  cor: z
-    .string({
-      required_error: "Cor é obrigatória",
-      invalid_type_error: "Cor deve ser um texto"
-    })
-    .regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, "Cor deve estar no formato hexadecimal válido (ex: #FF0000)")
-    .trim(),
-  
+  cor: corSchema,
   slug: slugSchema
 })
+
+export const patchMateriaSchema = createMateriaSchema
+  .partial()                               
+  .refine((obj) => Object.keys(obj).length > 0, {
+    message: "Pelo menos um campo precisa ser fornecido para atualização",
+  });
