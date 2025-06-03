@@ -27,7 +27,7 @@ export const POST = auth(async (request) => {
   try {
     blockForbiddenRequests(request, allowedRoles.POST);
 
-    const body = validBody(request);
+    const body = await validBody(request);
 
     const validationResult = createMateriaSchema.safeParse(body)
     
@@ -53,6 +53,10 @@ export const POST = auth(async (request) => {
     return NextResponse.json(materia, { status: 201 })
   } catch (error) {
     console.error('Erro ao criar matéria:', error)
+
+    if (error instanceof NextResponse) {
+      return error;
+    }
     
     if (error instanceof Error) {
       if (error.message.includes('Unique constraint')) {

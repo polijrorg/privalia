@@ -2,3 +2,10 @@ export const getMateriasMock = [
   { id: 1, name: 'Matéria 1', slug: 'materia-1', cor: '#00FF00' },
   { id: 2, name: 'Matéria 2', slug: 'materia-2', cor: '#FFFF00' },
 ]
+
+export const postMateriaMock = {
+  name: 'Nova Matéria',
+  descricao: 'Descrição da matéria',
+  cor: '#FF0000',
+  slug: 'nova-materia',
+}
