@@ -52,8 +52,6 @@ export const POST = auth(async (request) => {
 
     return NextResponse.json(materia, { status: 201 })
   } catch (error) {
-    console.error('Erro ao criar matéria:', error)
-
     if (error instanceof NextResponse) {
       return error;
     }
