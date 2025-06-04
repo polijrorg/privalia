@@ -10,11 +10,15 @@ post {
   auth: none
 }
 
+headers {
+  Cookie: {{cookie}}
+}
+
 body:json {
   {
-    "name": "Astronomia",
-    "descricao": "É a ciência que trata do universo sideral e dos corpos celestes, com o fim de situá-los no espaço e no tempo e explicar sua origem e seu movimento",
-    "cor": "#8C61F1",
-    "slug": "astronomia"
+    "name": "Nova Matéria",
+    "descricao": "Descrição da matéria",
+    "cor": "#FF0000",
+    "slug": "nova-materia"
   }
 }
