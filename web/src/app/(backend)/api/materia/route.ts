@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/auth';
 import { createMateria, getAllMaterias } from '@/backend/services/materia'
 import { createMateriaSchema } from '@/backend/schemas';
@@ -23,7 +23,7 @@ export async function GET() {
   }
 }
 
-export const POST = auth(async (request) => {
+export async function POST (request: NextRequest) {
   try {
     blockForbiddenRequests(request, allowedRoles.POST);
 
@@ -80,4 +80,4 @@ export const POST = auth(async (request) => {
 
     return zodErrorHandler(error);
   }
-})
+}
