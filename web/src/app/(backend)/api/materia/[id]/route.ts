@@ -1,13 +1,7 @@
 import { NextResponse } from 'next/server'
-import type { AllowedRoutes } from '@/types';
-import { auth } from '@/auth';
 import { getMateriaById } from '@/backend/services/materia'
 import { idSchema } from '@/backend/schemas';
 import { zodErrorHandler } from '@/utils';
-
-const allowedRoles: AllowedRoutes = {
-  POST: ["SUPER_ADMIN", "ADMIN"]
-}
 
 export async function GET(
   request: Request,
