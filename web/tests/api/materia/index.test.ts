@@ -2,8 +2,8 @@ import { describe, it, expect, vi, beforeEach, Mock } from 'vitest'
 import * as materiaService from '@/backend/services/materia'
 import { GET, POST } from '@/backend/api/materia/route'
 import { NextRequest } from 'next/server'
-import { getMateriasMock, postMateriaMock } from './mocks/materia'
-import { getCurrentAuth, setCurrentRole } from './mocks/auth'
+import { getMateriasMock, postMateriaMock } from '../../mocks/materia'
+import { getCurrentAuth, setCurrentRole } from '../../mocks/auth'
 
 vi.mock('@/auth', () => ({
   auth: vi.fn().mockImplementation((handler) =>
@@ -26,7 +26,7 @@ describe('GET /api/materia', () => {
     setCurrentRole(null);
   });
 
-  it('returns materias from the service', async () => {
+  it('should return materias from the service', async () => {
     (materiaService.getAllMaterias as Mock).mockResolvedValue(getMateriasMock);
     const response = await GET();
     
