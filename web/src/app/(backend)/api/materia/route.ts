@@ -25,7 +25,11 @@ export async function GET() {
 
 export async function POST (request: NextRequest) {
   try {
-    blockForbiddenRequests(request, allowedRoles.POST);
+    const forbidden = await blockForbiddenRequests(request, allowedRoles.POST);
+
+    if (forbidden) {
+      return forbidden;
+    }
 
     const body = await validBody(request);
 
