@@ -21,7 +21,7 @@ model User {
   name          String
   email         String    @unique
   password      String?
-  emailVerified DateTime?
+  emailVerified Boolean?
   image         String?
   role          Role      @default(USER)
 
