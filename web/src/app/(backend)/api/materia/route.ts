@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/auth';
 import { createMateria, getAllMaterias } from '@/backend/services/materia'
 import { createMateriaSchema } from '@/backend/schemas';
 import { blockForbiddenRequests, validBody, zodErrorHandler } from '@/utils';
