@@ -1,22 +1,22 @@
 import { cn } from "@/lib/utils";
-import { ReactNode } from "react";
-
-import { type HTMLMotionProps } from "motion/react";
-import MotionButton from "../common/BaseMotionButton";
+import { ReactNode, ButtonHTMLAttributes } from "react";
 import { Mail } from "lucide-react";
 
-type BaseButtonProps = HTMLMotionProps<"button">;
+interface CredentialsButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  children: ReactNode;
+  className?: string;
+}
 
-function CredentialsButton({ children, className, ...props }: BaseButtonProps & { children: ReactNode, className?: string }) {
+function CredentialsButton({ children, className, ...props }: CredentialsButtonProps) {
   return ( 
-    <MotionButton 
+    <button 
       type="submit" 
       className={cn("login-button relative text-pink-50 bg-pink-500", className)}
       {...props}
     >
       <Mail className="w-[26px] h-[26px]" />
       {children}
-    </MotionButton>
+    </button>
    );
 }
 
