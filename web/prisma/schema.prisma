@@ -17,6 +17,7 @@ enum Role {
 }
 
 model User {
+  // nao mexer >
   id            String    @id @default(uuid()) @map("_id")
   name          String
   email         String    @unique
@@ -24,8 +25,7 @@ model User {
   emailVerified Boolean?
   image         String?
   role          Role      @default(USER)
-
-  progress UserProgress[] // Track progress p user
+  // < nao mexer 
 
   userCursos UserCurso[] // Cursos que o user tá cursando
   createdAt  DateTime
@@ -106,7 +106,6 @@ model Topico {
   materia      Materia        @relation(fields: [materiaId], references: [id])
   materiaId    String
   topicoLicoes TopicoLicao[]
-  userProgress UserProgress[]
   cursoTopicos CursoTopico[]
 }
 
@@ -118,8 +117,6 @@ model Licao {
 
   conteudo     Conteudo[]
   topicoLicoes TopicoLicao[]
-
-  userProgress UserProgress[]
 }
 
 model TopicoLicao {
@@ -146,23 +143,7 @@ model Conteudo {
   licaoId String?
 }
 
-model UserProgress {
-  id     String @id @default(uuid()) @map("_id")
-  user   User   @relation(fields: [userId], references: [id])
-  userId String
-
-  licao   Licao?  @relation(fields: [licaoId], references: [id])
-  licaoId String?
-
-  topico   Topico? @relation(fields: [topicoId], references: [id])
-  topicoId String?
-
-  completed Boolean @default(false)
-
-  // Track each user's progress uniquely
-  @@unique([userId, licaoId, topicoId])
-}
-
+// evitar mexer daqui pra baixo:
 model Session {
   id        String   @id @map("_id")
   expiresAt DateTime
