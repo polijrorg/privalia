@@ -1,0 +1,25 @@
+import { forwardRef } from 'react';
+import { View, Text, TextInput, TextInputProps } from 'react-native';
+
+type InputProps = {
+  value: string;
+  onChangeText: (text: string) => void;
+  label?: string;
+} & TextInputProps;
+
+export const Input = forwardRef<View, InputProps>(
+  ({ value, onChangeText, label, ...TextInputProps }, ref) => {
+    return (
+      <View className="mb-6">
+        {label && <Text className="mb-2 font-semibold">{label}</Text>}
+
+        <TextInput
+          className="rounded-xl border border-gray-300 px-2 py-3"
+          value={value}
+          onChangeText={onChangeText}
+          {...TextInputProps} // todas as outras props padrão do TextInput
+        />
+      </View>
+    );
+  }
+);
