@@ -11,10 +11,10 @@ export const Input = forwardRef<View, InputProps>(
   ({ value, onChangeText, label, ...TextInputProps }, ref) => {
     return (
       <View className="mb-6">
-        {label && <Text className="mb-2 font-semibold">{label}</Text>}
+        {label && <Text className="mb-2 font-semibold text-white">{label}</Text>}
 
         <TextInput
-          className="rounded-xl border border-gray-300 px-2 py-3"
+          className="rounded-xl border border-gray-300 px-2 py-3 text-secondary"
           value={value}
           onChangeText={onChangeText}
           {...TextInputProps} // todas as outras props padrão do TextInput

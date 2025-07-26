@@ -41,37 +41,39 @@ export default function LoginScreen() {
   }
 
   return (
-    <View className="flex-1 justify-center p-6">
-      <View className="items-center justify-center ">
-        <View className="h-20 w-20 items-center justify-center rounded-xl bg-primary">
-          <Text className="text-xl font-bold text-white">P</Text>
+    <View className="flex-1 justify-center items-center bg-backgroundPattern ">
+      <View className="w-1/2  rounded-xl p-6 bg-backgroundPattern " >
+        <View className="items-center justify-center ">
+          <View className="h-20 w-20 items-center justify-center rounded-xl bg-primary">
+            <Text className="text-xl font-bold text-white">P</Text>
+          </View>
         </View>
-      </View>
-      <Text className="mt-5 text-center text-2xl font-bold">Auditoria Logística</Text>
-      <Text className="text-1xl mt-5 text-center font-bold">Privalia</Text>
+        <Text className="mt-5 text-center text-2xl font-bold text-white">Auditoria Logística</Text>
+        <Text className="text-1xl mt-5 text-center font-bold text-secondary">Privalia</Text>
 
-      <Input
-        label="Email"
-        placeholder="analista@privalia.com"
-        value={email}
-        onChangeText={setEmail}></Input>
+        <Input
+          label="Email"
+          placeholder="analista@privalia.com"
+          value={email}
+          onChangeText={setEmail}></Input>
 
-      <Input
-        label="Senha"
-        placeholder="••••••••"
-        value={password}
-        secureTextEntry
-        onChangeText={setPassword}></Input>
+        <Input
+          label="Senha"
+          placeholder="••••••••"
+          value={password}
+          secureTextEntry
+          onChangeText={setPassword}></Input>
 
-      <Button
-        onPress={handleLogin}
-        disabled={isLoading}
-        title="Entrar"
-        className="mb-4"
-        isLoading={isLoading}></Button>
+        <Button
+          onPress={handleLogin}
+          disabled={isLoading}
+          title="Entrar"
+          className="mb-4"
+          isLoading={isLoading}></Button>
 
-      <View className="flex-row justify-center">
-        <Text>Versão 1.0 • Ambiente de Produção </Text>
+        <View className="flex-row justify-center text-secondary">
+          <Text className='text-secondary' >Versão 1.0 • Ambiente de Produção </Text>
+        </View>
       </View>
     </View>
   );
