@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { saltAndHashPassword } from "@/backend/services/auth";
 import { registerSchema } from "@/backend/schemas";
 import { returnInvalidDataErrors, validBody, zodErrorHandler } from "@/utils/api";
-import { createUser, findUserByEmail } from "../../services/user";
+import { createUser, getUsers, deleteUser, findUserByEmail } from "../../services/user";
 
 export async function POST(request: NextRequest) {
   try {
@@ -47,5 +47,42 @@ export async function POST(request: NextRequest) {
     }
 
     return zodErrorHandler(error);    
+  }
+}
+
+export async function GET() {
+  try{
+    const users = await getUsers();
+    return NextResponse.json(users, { status: 200 });
+  }catch (error) {
+    console.error('Erro ao ler usuários:', error)
+    return NextResponse.json(
+      { error: 'Erro ao ler usuários' },
+      { status: 500 }
+    )
+  }
+}
+
+export async function DELETE(id: string) {
+  try {
+    if (!id) {
+      return NextResponse.json(
+        { error: "ID do usuário é obrigatório" },
+        { status: 400 }
+      );
+    }
+
+    await deleteUser(id);
+
+    return NextResponse.json(
+      { message: "Usuário deletado com sucesso" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error('Erro ao deletar usuário:', error);
+    return NextResponse.json(
+      { error: 'Erro ao deletar usuário' },
+      { status: 500 }
+    );
   }
 }

@@ -7,7 +7,7 @@ export async function findUserByEmail(email: string) {
   })
 }
 
-interface CreateUserProps {
+interface CreateAuditoriaProps {
   name: string, email: string, password: string, role: Role
 }
 

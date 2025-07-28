@@ -27,6 +27,8 @@ model User {
   role          Role      @default(USER)
   // < nao mexer 
 
+  auditorias Auditoria[]
+
   userCursos UserCurso[] // Cursos que o user tá cursando
   createdAt  DateTime
   updatedAt  DateTime
@@ -187,4 +189,14 @@ model Verification {
   updatedAt  DateTime?
 
   @@map("verification")
+}
+
+model Auditoria {  
+  id          String    @id @default(uuid()) @map("_id")
+  name        String
+  categoria   String    
+  amostra     Int
+  user        User?   @relation(fields: [userId], references: [id])
+  userId      String?
+  total_pecas Int
 }
