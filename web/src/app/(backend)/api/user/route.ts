@@ -62,7 +62,7 @@ export async function GET() {
     )
   }
 }
-
+/*
 export async function DELETE(id: string) {
   try {
     if (!id) {
@@ -85,4 +85,4 @@ export async function DELETE(id: string) {
       { status: 500 }
     );
   }
-}
+}*/

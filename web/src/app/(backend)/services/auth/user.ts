@@ -18,3 +18,17 @@ export async function getUserByEmail(email: string, plainPassword: string) {
   if (!isValid) return null;
   return user;
 }
+
+export async function getUserById(userId: string) {
+  return await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      createdAt: true,
+      updatedAt: true
+    }
+  });
+}

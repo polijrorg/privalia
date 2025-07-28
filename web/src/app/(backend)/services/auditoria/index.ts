@@ -1,66 +1,61 @@
-import type { Role } from "@/generated/prisma";
-import prisma from "@/backend/services/db";
+import prisma from '@/backend/services/db';
 
-export async function findUserByEmail(email: string) {
-  return await prisma.user.findUnique({
-    where: { email }
-  })
-}
-
-interface CreateAuditoriaProps {
-  name: string, email: string, password: string, role: Role
-}
-
-export async function createUser({ name, email, password, role }: CreateUserProps) {
-  return await prisma.user.create({
-    data: {
-      name,
-      email,
-      password,
-      role: role ?? "USER",
-      createdAt: new Date(),
-      updatedAt: new Date()
-    },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      role: true,
-    }
-  });
-}
-
-export async function getUsers() {
-  return await prisma.user.findMany({
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      role: true,
-      createdAt: true,
-      updatedAt: true
-    }
-  });
-}
-
-export async function deleteUser(id: string) {
-  return await prisma.user.delete({
-    where: { id }
-  });
-}
-
-export async function updateUser(id: string, data: Partial<CreateUserProps>) {
-  return await prisma.user.update({
-    where: { id },
+export async function createAuditoria(data: any, userId: string) {
+  return prisma.auditoria.create({
     data: {
       ...data,
-      updatedAt: new Date()
+      userId
     },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      role: true,
-    }
+    include: {
+      user: true,
+    },
   });
+}
+
+export async function getAuditorias(){
+    return prisma.auditoria.findMany({
+        select: {
+            id: true,
+            name: true,
+            categoria: true,
+            amostra: true,
+            total_pecas: true,
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true
+                }
+            }
+        }
+    })
+}
+
+export async function deleteAuditoria(id: string) {
+    return prisma.auditoria.delete({
+        where: { id },
+    });
+}
+
+export async function updateAuditoria(id: string, data: any) {
+    return await prisma.auditoria.update({
+        where: { id },
+        data: {
+            ...data
+        },
+        select: {
+            id: true,
+            name: true,
+            categoria: true,
+            amostra: true,
+            total_pecas: true,
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true
+                }
+            }
+        }
+    });
 }
