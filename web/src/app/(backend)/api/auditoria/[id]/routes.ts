@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { saltAndHashPassword } from "@/backend/services/auth";
-import { registerSchema, updateUserSchema } from "@/backend/schemas";
-import { returnInvalidDataErrors, validBody, zodErrorHandler } from "@/utils/api";
-import { deleteUser, updateUser } from "@/app/(backend)/services/user";
+import { returnInvalidDataErrors, validBody } from "@/utils/api";
 import { deleteAuditoria, updateAuditoria } from "@/app/(backend)/services/auditoria";
 import { patchAuditoriaSchema } from "@/app/(backend)/schemas/auditoria.schema";
 

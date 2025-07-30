@@ -3,7 +3,6 @@ import { blockForbiddenRequests, returnInvalidDataErrors, validBody, zodErrorHan
 import type { AllowedRoutes } from '@/types';
 import { createAuditoriaSchema } from '../../schemas/auditoria.schema';
 import { auth } from '@/auth';
-import { getUserByEmail, getUserById } from '../../services/auth';
 import { createAuditoria, getAuditorias } from '../../services/auditoria';
 
 const allowedRoles: AllowedRoutes = {

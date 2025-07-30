@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { saltAndHashPassword } from "@/backend/services/auth";
 import { registerSchema } from "@/backend/schemas";
 import { returnInvalidDataErrors, validBody, zodErrorHandler } from "@/utils/api";
-import { createUser, getUsers, deleteUser, findUserByEmail } from "../../services/user";
+import { getUsers, findUserByEmail } from "../../services/user";
+import { authClient } from "@/lib/auth-client";
 
 export async function POST(request: NextRequest) {
   try {
@@ -30,9 +30,12 @@ export async function POST(request: NextRequest) {
       );
     }    
     
-    const hashedPassword = await saltAndHashPassword(password);
-
-    const user = await createUser({ name, email, password: hashedPassword, role: "USER" });
+    const user = await authClient.signUp.email({
+      name,
+      email,
+      password,
+      callbackURL: "/",
+    });
     
     return NextResponse.json(
       { 
@@ -62,27 +65,3 @@ export async function GET() {
     )
   }
 }
-/*
-export async function DELETE(id: string) {
-  try {
-    if (!id) {
-      return NextResponse.json(
-        { error: "ID do usuário é obrigatório" },
-        { status: 400 }
-      );
-    }
-
-    await deleteUser(id);
-
-    return NextResponse.json(
-      { message: "Usuário deletado com sucesso" },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error('Erro ao deletar usuário:', error);
-    return NextResponse.json(
-      { error: 'Erro ao deletar usuário' },
-      { status: 500 }
-    );
-  }
-}*/
