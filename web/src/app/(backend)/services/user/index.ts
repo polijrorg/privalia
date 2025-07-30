@@ -11,14 +11,30 @@ interface CreateUserProps {
   name: string, email: string, password: string, role: Role
 }
 
-export async function createUser({ name, email, password, role }: CreateUserProps) {
-  return await prisma.user.create({
+export async function getUsers() {
+  return await prisma.user.findMany({
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      createdAt: true,
+      updatedAt: true
+    }
+  });
+}
+
+export async function deleteUser(id: string) {
+  return await prisma.user.delete({
+    where: { id }
+  });
+}
+
+export async function updateUser(id: string, data: Partial<CreateUserProps>) {
+  return await prisma.user.update({
+    where: { id },
     data: {
-      name,
-      email,
-      password,
-      role: role ?? "USER",
-      createdAt: new Date(),
+      ...data,
       updatedAt: new Date()
     },
     select: {

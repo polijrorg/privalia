@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { saltAndHashPassword } from "@/backend/services/auth";
 import { registerSchema } from "@/backend/schemas";
 import { returnInvalidDataErrors, validBody, zodErrorHandler } from "@/utils/api";
-import { createUser, findUserByEmail } from "../../services/user";
+import { getUsers, findUserByEmail } from "../../services/user";
+import { authClient } from "@/lib/auth-client";
 
 export async function POST(request: NextRequest) {
   try {
@@ -30,9 +30,12 @@ export async function POST(request: NextRequest) {
       );
     }    
     
-    const hashedPassword = await saltAndHashPassword(password);
-
-    const user = await createUser({ name, email, password: hashedPassword, role: "USER" });
+    const user = await authClient.signUp.email({
+      name,
+      email,
+      password,
+      callbackURL: "/",
+    });
     
     return NextResponse.json(
       { 
@@ -47,5 +50,18 @@ export async function POST(request: NextRequest) {
     }
 
     return zodErrorHandler(error);    
+  }
+}
+
+export async function GET() {
+  try{
+    const users = await getUsers();
+    return NextResponse.json(users, { status: 200 });
+  }catch (error) {
+    console.error('Erro ao ler usuários:', error)
+    return NextResponse.json(
+      { error: 'Erro ao ler usuários' },
+      { status: 500 }
+    )
   }
 }

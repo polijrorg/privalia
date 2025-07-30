@@ -14,12 +14,12 @@ export const auth = betterAuth({
     emailAndPassword: {  
         enabled: true
     },
-    socialProviders: { 
-        google: { 
-           clientId: process.env.GOOGLE_ID as string, 
-           clientSecret: process.env.GOOGLE_SECRET as string, 
-        }, 
-    }, 
+    // socialProviders: { 
+    //     google: { 
+    //        clientId: process.env.GOOGLE_ID as string, 
+    //        clientSecret: process.env.GOOGLE_SECRET as string, 
+    //     }, 
+    // }, 
     plugins: [
         expo(),
         customSession(async ({ user, session }) => {

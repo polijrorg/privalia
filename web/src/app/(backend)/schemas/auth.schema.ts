@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { emailSchema, passwordSchema } from "./base.schema";
+import { emailSchema, nameSchema, passwordSchema } from "./base.schema";
 
 export const loginSchema = z.object({
   email: emailSchema,
@@ -21,5 +21,17 @@ export const registerSchema = z.object({
     message: "Senhas não conferem",
     path: ["confirmPassword"],
 })
+
+export const updateUserSchema = z.object({
+  name: nameSchema.optional(),
+  email: emailSchema.optional(),
+  password: passwordSchema.optional(),
+}).refine((data) => {
+  // Pelo menos um campo deve ser fornecido
+  return Object.keys(data).length > 0;
+}, {
+  message: "Pelo menos um campo deve ser fornecido para atualização",
+});
+
 
 export type LoginData = z.infer<typeof loginSchema>;
