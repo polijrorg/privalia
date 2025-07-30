@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { saltAndHashPassword } from "@/backend/services/auth";
 import { registerSchema } from "@/backend/schemas";
 import { returnInvalidDataErrors, validBody, zodErrorHandler } from "@/utils/api";
-import { createUser, findUserByEmail } from "../../services/user";
+import { findUserByEmail } from "../../services/user";
+import { authClient } from "@/lib/auth-client";
 
 export async function POST(request: NextRequest) {
   try {
@@ -30,10 +30,13 @@ export async function POST(request: NextRequest) {
       );
     }    
     
-    const hashedPassword = await saltAndHashPassword(password);
+    const user = await authClient.signUp.email({
+      name,
+      email,
+      password,
+      callbackURL: "/",
+    });
 
-    const user = await createUser({ name, email, password: hashedPassword, role: "USER" });
-    
     return NextResponse.json(
       { 
         message: "Usuário criado com sucesso",

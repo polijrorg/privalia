@@ -6,11 +6,6 @@ import { createRequest } from "../../mocks/requests";
 
 vi.mock('@/backend/services/user', () => ({
   findUserByEmail: vi.fn(),
-  createUser: vi.fn(),
-}))
-
-vi.mock('@/backend/services/auth', () => ({
-  saltAndHashPassword: vi.fn()
 }))
 
 import { POST } from '@/backend/api/user/route'
@@ -31,8 +26,6 @@ describe('POST /api/user', () => {
 
   it('should register if everything is alright', async () => {
     (userService.findUserByEmail as Mock).mockResolvedValue(null);
-    (userService.createUser as Mock).mockResolvedValue(postUserMock);
-    (authService.saltAndHashPassword as Mock).mockResolvedValue("HashedPassword");
 
     const response = await POST(createUserRequest());
     expect(response?.status).toBe(201);
