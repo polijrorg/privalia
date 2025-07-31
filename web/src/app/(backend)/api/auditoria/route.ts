@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { blockForbiddenRequests, returnInvalidDataErrors, validBody, zodErrorHandler } from '@/utils';
-import type { AllowedRoutes } from '@/types';
+import { returnInvalidDataErrors, validBody, zodErrorHandler } from '@/utils';
+// import type { AllowedRoutes } from '@/types';
 import { createAuditoriaSchema } from '../../schemas/auditoria.schema';
 import { auth } from '@/auth';
 import { createAuditoria, getAuditorias } from '../../services/auditoria';
 
-const allowedRoles: AllowedRoutes = {
-  POST: ["SUPER_ADMIN", "ADMIN"]
-};
+// const allowedRoles: AllowedRoutes = {
+//   POST: ["SUPER_ADMIN", "ADMIN"]
+// };
 
 export async function POST(request: NextRequest) {
   try {

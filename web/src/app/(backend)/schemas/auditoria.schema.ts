@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { idSchema, nameSchema, slugSchema } from './base.schema';
+import { nameSchema } from './base.schema';
 
 export const createAuditoriaSchema = z.object({
   name: nameSchema,
