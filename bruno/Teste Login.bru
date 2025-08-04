@@ -1,0 +1,22 @@
+meta {
+  name: Teste Login
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:3000/api/auth/email/login
+  body: json
+  auth: inherit
+}
+
+headers {
+  Cookie: next-auth.session-token=KHwtqDRmq8alwaRzky5Ebwx1jSMjI7wl.ojgz7UnRFeKYEbG48SM4lMn4r8LqaR5kF%2BsViIcVygY%3D
+}
+
+body:json {
+  {
+    "email": "hassie38@yahoo.com",
+    "password": "Teste123"
+  }
+}
