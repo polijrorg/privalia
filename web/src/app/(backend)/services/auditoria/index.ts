@@ -1,6 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import prisma from '@/backend/services/db';
 
+export async function findAuditoriaById(id: string){
+    return await prisma.auditoria.findUnique({
+        where: { id },
+        include: {
+        user: {
+            select: {
+            id: true,
+            name: true,
+            email: true
+            }
+        }
+        }
+    });
+}
+
 export async function createAuditoria(data: any, userId: string) {
   return prisma.auditoria.create({
     data: {

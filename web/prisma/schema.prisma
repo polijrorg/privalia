@@ -28,6 +28,8 @@ model User {
   // < nao mexer 
 
   auditorias Auditoria[]
+  itens       Item[]
+
 
   userCursos UserCurso[] // Cursos que o user tá cursando
   createdAt  DateTime
@@ -199,4 +201,22 @@ model Auditoria {
   user        User?   @relation(fields: [userId], references: [id])
   userId      String?
   total_pecas Int
+
+  itens       Item[]
+
+}
+
+model Item {
+  id                  String    @id @default(uuid()) @map("_id")
+
+  auditId            String
+  auditoria           Auditoria   @relation(fields: [auditId], references: [id], onDelete: Cascade)
+
+  user        User?   @relation(fields: [userId], references: [id])
+  userId      String?
+
+  ean                 String
+  resultado           String
+  divergencia         String
+  imagem_divergente   String
 }
