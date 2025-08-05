@@ -14,9 +14,11 @@ export const Input = forwardRef<View, InputProps>(
         {label && <Text className="mb-2 font-semibold text-white">{label}</Text>}
 
         <TextInput
-          className="rounded-xl border border-gray-300 px-2 py-3 text-secondary"
+          className="rounded-xl border border-gray-300 px-2 py-3 text-white"
           value={value}
           onChangeText={onChangeText}
+          // TODO: Alterar a cor para o tema 
+          placeholderTextColor={"#808A95"}
           {...TextInputProps} // todas as outras props padrão do TextInput
         />
       </View>

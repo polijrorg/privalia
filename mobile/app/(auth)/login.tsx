@@ -4,22 +4,51 @@ import { useAuth } from '~/contexts/AuthContext';
 
 import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
+import { isValidEmail, isValidPassword } from '~/Utils/ValidaCampos';
+
+import { useRouter } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
+
 
 export default function LoginScreen() {
-  const { signIn, signInWithGoogle, isLoading: authLoading } = useAuth();
+  const { signIn, signInWithGoogle, setUser, isLoading: authLoading } = useAuth();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const handleLogin = async () => {
-    if (!email || !password) {
-      Alert.alert('Atenção!', 'Preencha todos os campos.');
+    if (!isValidEmail(email)) {
+      Alert.alert('Atenção!', 'Insira um email válido.');
+      return;
+    }
+
+    if (!isValidPassword(password)) {
+      Alert.alert('Atenção!', 'Insira uma senha com no mínimo 6 caracteres.');
       return;
     }
 
     setIsLoading(true);
 
+    setTimeout(() => {
+      // Simula login bem-sucedido
+      console.log('Login mockado com sucesso!');
+
+      // ⚠️ Mocka o usuário manualmente
+      setUser({
+        id: '1',
+        name: 'Usuário Teste',
+        email,
+      });
+
+      // Navega para a tela principal
+      router.replace('/');
+
+      setIsLoading(false);
+    }, 1000);
+
+    /*
     const result = await signIn(email, password);
     console.log(result);
 
@@ -27,8 +56,9 @@ export default function LoginScreen() {
       Alert.alert('Falha no login', result.error || 'Ocorreu um erro, tente novamente mais tarde.');
     }
     // If successful, the AuthProvider will handle navigation
-
+    
     setIsLoading(false);
+    */
   };
 
   if (authLoading) {
@@ -41,8 +71,12 @@ export default function LoginScreen() {
   }
 
   return (
-    <View className="flex-1 justify-center items-center bg-backgroundPattern ">
-      <View className="w-1/2  rounded-xl p-6 bg-backgroundPattern " >
+    <LinearGradient
+      colors={['#0a0a0f', '#26262e']} // from-background to-muted
+      start={[0, 0]}
+      end={[1, 1]}
+      className="flex-1 items-center justify-center">
+      <View className="w-1/2  rounded-xl bg-backgroundPattern p-6 ">
         <View className="items-center justify-center ">
           <View className="h-20 w-20 items-center justify-center rounded-xl bg-primary">
             <Text className="text-xl font-bold text-white">P</Text>
@@ -72,9 +106,9 @@ export default function LoginScreen() {
           isLoading={isLoading}></Button>
 
         <View className="flex-row justify-center text-secondary">
-          <Text className='text-secondary' >Versão 1.0 • Ambiente de Produção </Text>
+          <Text className="text-secondary">Versão 1.0 • Ambiente de Produção </Text>
         </View>
       </View>
-    </View>
+    </LinearGradient>
   );
 }
