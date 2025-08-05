@@ -23,7 +23,7 @@ interface AuthContextType {
   signOut: () => Promise<void>;
   signInWithGoogle: () => Promise<{ success: boolean; error?: string }>;
   refreshSession: () => Promise<void>;
-  setUser: (user: User | null) => void; 
+  setUser: (user: User | null) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -170,7 +170,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         signOut,
         signInWithGoogle,
         refreshSession,
-        setUser
+        setUser,
       }}>
       {children}
     </AuthContext.Provider>

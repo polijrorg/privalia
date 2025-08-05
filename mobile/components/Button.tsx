@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { ButtonType } from '~/types/ButtonTypes';
 
-import Feather from '@expo/vector-icons/Feather'
+import Feather from '@expo/vector-icons/Feather';
 
 type FeatherIconName = keyof typeof Feather.glyphMap;
 
@@ -22,7 +22,14 @@ type ButtonProps = {
 
 export const Button = forwardRef<View, ButtonProps>(
   (
-    { title, variant = ButtonType.Filled,iconButton, isLoading = false, className, ...touchableProps },
+    {
+      title,
+      variant = ButtonType.Filled,
+      iconButton,
+      isLoading = false,
+      className,
+      ...touchableProps
+    },
     ref
   ) => {
     let containerClass = '';
@@ -55,9 +62,11 @@ export const Button = forwardRef<View, ButtonProps>(
         {isLoading ? (
           <ActivityIndicator color="white" />
         ) : (
-          <View className='flex-row items-center justify-center gap-4'>
-            {iconButton && <Feather name={iconButton} size={16} color="white" className='font-bold' />}
-          <Text className={`text-center text-lg font-semibold ${textClass}`}>{title}</Text>
+          <View className="flex-row items-center justify-center gap-4">
+            {iconButton && (
+              <Feather name={iconButton} size={16} color="white" className="font-bold" />
+            )}
+            <Text className={`text-center text-lg font-semibold ${textClass}`}>{title}</Text>
           </View>
         )}
       </TouchableOpacity>

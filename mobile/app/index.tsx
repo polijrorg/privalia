@@ -3,7 +3,7 @@ import { Text, View, ScrollView } from 'react-native';
 
 import Card from '~/components/Card';
 import { Button } from '~/components/Button';
-import { Chip } from '~/components/Chip'
+import { Chip } from '~/components/Chip';
 import Feather from '@expo/vector-icons/Feather';
 
 export default function Home() {

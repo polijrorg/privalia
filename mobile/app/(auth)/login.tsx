@@ -9,7 +9,6 @@ import { isValidEmail, isValidPassword } from '~/Utils/ValidaCampos';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 
-
 export default function LoginScreen() {
   const { signIn, signInWithGoogle, setUser, isLoading: authLoading } = useAuth();
 

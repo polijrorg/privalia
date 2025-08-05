@@ -26,7 +26,7 @@
       "ios": {
         "appleId": "financeiro@polijunior.com.br",
         "ascAppId": "6572284907",
-        "appleTeamId": "82L63Y7JQJ" 
+        "appleTeamId": "82L63Y7JQJ"
       },
       "android": {
         "serviceAccountKeyPath": "./google-services.json",
