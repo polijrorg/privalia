@@ -7,7 +7,7 @@ import { createItemSchema } from '../../../schemas/item.schema';
 
 //estou fazendo com que apenas o susuario que criou a auditoria possa criar itens nela
 //ver se o usuario que não criou a auditoria pode criar itens nessa auditoria
-export async function POST(request: NextRequest, { params}: { params: { auditId: string}}) {
+export async function POST(request: NextRequest, { params}: { params: { auditoriaId: string}}) {
     try{
 
         const session = await auth.api.getSession(request);
@@ -22,10 +22,10 @@ export async function POST(request: NextRequest, { params}: { params: { auditId:
 
         const body = await validBody(request);
 
-        const audId = params.auditId;
+        const auditId = params.auditoriaId;
 
         //Precisa dessa parte?
-        const existingAuditoria = await findAuditoriaById(audId);
+        const existingAuditoria = await findAuditoriaById(auditId);
 
         if (!existingAuditoria) {
             return NextResponse.json(
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest, { params}: { params: { auditId:
         }
 
         const validatedData = validationResult.data;
-        const item = await createItem(validatedData, audId, userId);
+        const item = await createItem(validatedData, auditId, userId);
 
         return NextResponse.json(item, { status: 201 });
 
@@ -70,11 +70,10 @@ export async function POST(request: NextRequest, { params}: { params: { auditId:
 }
 
 //ver se get items são todos ou só os da auditoria
-export async function GET(request: NextRequest, context: { params: { auditId: string } }) {
+export async function GET(request: NextRequest, context: { params: { auditoriaId: string } }) {
   try {
-
-    const audId = context.params.auditId;
-
+    const audId = context.params.auditoriaId;
+    console.log('auditId recebido:', audId);
     if (!audId) {
       return NextResponse.json(
         { error: "ID da auditoria não fornecido" },
@@ -83,6 +82,7 @@ export async function GET(request: NextRequest, context: { params: { auditId: st
     }
     //Precisa dessa parte?
     const existingAuditoria = await findAuditoriaById(audId);
+    console.log("Resultado da busca:", existingAuditoria);
 
     if (!existingAuditoria) {
       return NextResponse.json(
