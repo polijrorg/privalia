@@ -39,3 +39,9 @@ export async function getItems(auditId: string){
         }
     });
 }
+
+export async function deleteItem(id: string) {
+    return prisma.item.delete({
+        where: { id },
+    });
+}
