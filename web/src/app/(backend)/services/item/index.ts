@@ -45,3 +45,32 @@ export async function deleteItem(id: string) {
         where: { id },
     });
 }
+
+export async function updateItem(id: string, data: any) {
+    return await prisma.item.update({
+        where: { id },
+        data: {
+            ...data
+        },
+        select: {
+            id: true,
+            ean: true,
+            resultado: true,
+            divergencia: true,
+            imagem_divergente: true,
+            auditoria: {
+                select: {
+                    id: true,
+                    name: true
+                }
+            },
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true
+                }
+            }
+        }
+    })
+}

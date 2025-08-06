@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { returnInvalidDataErrors, validBody, zodErrorHandler } from '@/utils';
 import { auth } from '@/auth';
 import { findAuditoriaById } from '../../../services/auditoria';
-import { createItem, deleteItem, getItems } from '../../../services/item';
-import { createItemSchema } from '../../../schemas/item.schema';
+import { createItem, deleteItem, getItems, updateItem } from '../../../services/item';
+import { createItemSchema, patchItemSchema } from '../../../schemas/item.schema';
 
 export async function DELETE(request: NextRequest, { params }: { params: { itemId: string } }) {
   try {
@@ -65,6 +65,12 @@ export async function PUT(request: NextRequest, { params }: { params: { itemId: 
                 item: updatedItem
             },
             { status: 200 }
+        );
+    } catch (error) {
+        console.error('Erro ao atualizar item:', error);
+        return NextResponse.json(
+            { error: 'Erro ao atualizar item' },
+            { status: 500 }
         );
     }
 }
