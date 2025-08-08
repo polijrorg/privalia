@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { returnInvalidDataErrors, validBody, zodErrorHandler } from '@/utils';
-import { auth } from '@/auth';
-import { findAuditoriaById } from '../../../../services/auditoria';
-import { createItem, deleteItem, getItems, updateItem } from '../../../../services/item';
-import { createItemSchema, patchItemSchema } from '../../../../schemas/item.schema';
+import { returnInvalidDataErrors, validBody } from '@/utils';
+import { deleteItem, updateItem } from '../../../../services/item';
+import { patchItemSchema } from '../../../../schemas/item.schema';
 
 export async function DELETE(request: NextRequest, { params }: { params: { itemId: string } }) {
   try {

@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { nameSchema } from './base.schema';
 
 export const createItemSchema = z.object({
     ean: z.string(),

@@ -1,5 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import prisma from '@/backend/services/db';
+import { Auditoria } from '@/generated/prisma';
+
+//create type for auditoria withou id 
+type AuditoriaCreate = Omit<Auditoria, 'id'>;
 
 export async function findAuditoriaById(id: string){
     return await prisma.auditoria.findUnique({
@@ -16,7 +20,7 @@ export async function findAuditoriaById(id: string){
     });
 }
 
-export async function createAuditoria(data: any, userId: string) {
+export async function createAuditoria(data: AuditoriaCreate, userId: string) {
   return prisma.auditoria.create({
     data: {
       ...data,
@@ -53,7 +57,7 @@ export async function deleteAuditoria(id: string) {
     });
 }
 
-export async function updateAuditoria(id: string, data: any) {
+export async function updateAuditoria(id: string, data: Auditoria) {
     return await prisma.auditoria.update({
         where: { id },
         data: {

@@ -1,15 +1,12 @@
 import prisma from '@/backend/services/db';
+import { Item } from '@/generated/prisma';
 
-export async function createItem(data: any, auditId: string, userId: string) {
+export async function createItem(data: Item, auditId: string, userId: string) {
   return prisma.item.create({
     data: {
       ...data,
       auditId,
       userId
-    },
-    include: {
-      auditoria: true,
-      user: true,
     },
   });
 }
@@ -46,7 +43,7 @@ export async function deleteItem(id: string) {
     });
 }
 
-export async function updateItem(id: string, data: any) {
+export async function updateItem(id: string, data: Item) {
     return await prisma.item.update({
         where: { id },
         data: {
