@@ -3,7 +3,7 @@ import prisma from '@/backend/services/db';
 import { Auditoria } from '@/generated/prisma';
 
 //create type for auditoria withou id 
-type AuditoriaCreate = Omit<Auditoria, 'id'>;
+type AuditoriaCreate = Omit<Auditoria, 'id'| 'userId'>;
 
 export async function findAuditoriaById(id: string){
     return await prisma.auditoria.findUnique({
@@ -57,7 +57,7 @@ export async function deleteAuditoria(id: string) {
     });
 }
 
-export async function updateAuditoria(id: string, data: Auditoria) {
+export async function updateAuditoria(id: string, data: Partial<AuditoriaCreate>) {
     return await prisma.auditoria.update({
         where: { id },
         data: {

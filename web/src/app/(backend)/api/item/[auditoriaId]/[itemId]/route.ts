@@ -3,9 +3,9 @@ import { returnInvalidDataErrors, validBody } from '@/utils';
 import { deleteItem, updateItem } from '../../../../services/item';
 import { patchItemSchema } from '../../../../schemas/item.schema';
 
-export async function DELETE(request: NextRequest, { params }: { params: { itemId: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ itemId: string }> }) {
   try {
-    const itemId = params.itemId;
+    const itemId  = (await params).itemId;
 
     if (!itemId) {
       return NextResponse.json(
@@ -36,9 +36,9 @@ export async function DELETE(request: NextRequest, { params }: { params: { itemI
   }
 }
 
-export async function PUT(request: NextRequest, { params }: { params: { itemId: string } } ) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ itemId: string }> } ) {
     try {
-        const itemId = params.itemId;
+        const itemId  = (await params).itemId;
 
         if (!itemId) {
             return NextResponse.json(

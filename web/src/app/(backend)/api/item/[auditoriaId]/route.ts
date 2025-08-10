@@ -7,7 +7,7 @@ import { createItemSchema } from '../../../schemas/item.schema';
 
 //estou fazendo com que apenas o susuario que criou a auditoria possa criar itens nela
 //ver se o usuario que não criou a auditoria pode criar itens nessa auditoria
-export async function POST(request: NextRequest, { params}: { params: { auditoriaId: string}}) {
+export async function POST(request: NextRequest, { params}: { params: Promise<{ auditoriaId: string}>}) {
     try{
 
         const session = await auth.api.getSession(request);
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest, { params}: { params: { auditori
 
         const body = await validBody(request);
 
-        const auditId = params.auditoriaId;
+        const auditId = (await params).auditoriaId;
 
         //Precisa dessa parte?
         const existingAuditoria = await findAuditoriaById(auditId);
@@ -70,9 +70,9 @@ export async function POST(request: NextRequest, { params}: { params: { auditori
 }
 
 //ver se get items são todos ou só os da auditoria
-export async function GET(request: NextRequest, context: { params: { auditoriaId: string } }) {
+export async function GET(request: NextRequest, context: { params: Promise<{ auditoriaId: string }> }) {
   try {
-    const audId = context.params.auditoriaId;
+    const audId = (await context.params).auditoriaId;
     console.log('auditId recebido:', audId);
     if (!audId) {
       return NextResponse.json(
