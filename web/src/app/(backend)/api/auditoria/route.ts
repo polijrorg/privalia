@@ -5,10 +5,6 @@ import { createAuditoriaSchema } from '../../schemas/auditoria.schema';
 import { auth } from '@/auth';
 import { createAuditoria, getAuditorias } from '../../services/auditoria';
 
-// const allowedRoles: AllowedRoutes = {
-//   POST: ["SUPER_ADMIN", "ADMIN"]
-// };
-
 export async function POST(request: NextRequest) {
   try {
 

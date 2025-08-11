@@ -201,6 +201,14 @@ model Auditoria {
   userId      String?
   total_pecas Int
 
+  PO         String @default("N/A")
+  fornecedor  String  @default("Fornecedor Desconhecido")
+  status      String  @default("Pendente")
+  data_inicio DateTime  @default(now())
+  data_fim    DateTime? @default(now())
+  idExterno   String  @default("SEM_ID")
+
+
   itens       Item[]
 
 }
@@ -218,4 +226,7 @@ model Item {
   resultado           String
   divergencia         String
   imagem_divergente   String
+
+  data                DateTime  @default(now())  
+  endereco_fisico     String  @default("Local não informado")
 }

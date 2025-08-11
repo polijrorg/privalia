@@ -1,7 +1,7 @@
 import prisma from '@/backend/services/db';
 import { Item } from '@/generated/prisma';
 
-type ItemWithOutId = Omit<Item, 'id' | 'auditId' | 'userId'>;
+type ItemWithOutId = Omit<Item, 'id' | 'auditId' | 'userId'| 'data'>;
 
 export async function createItem(data: ItemWithOutId, auditId: string, userId: string) {
   return prisma.item.create({
