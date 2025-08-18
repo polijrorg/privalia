@@ -6,10 +6,12 @@ export const createAuditoriaSchema = z.object({
   categoria: z.string().min(2, 'Categoria obrigatória'),
   amostra: z.number(),
   total_pecas: z.number(),
-  PO: z.string(),
+  PO: z.string().nullable(),
   fornecedor: z.string(),
   status: z.string(),
-  idExterno: z.string()
+  idExterno: z.string().nullable(),
+  modelo_negocio: z.string(),
+  pedido: z.string().nullable(),
 });
 
 export const patchAuditoriaSchema = createAuditoriaSchema.partial().refine((obj) => Object.keys(obj).length > 0, {

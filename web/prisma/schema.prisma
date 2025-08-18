@@ -201,13 +201,15 @@ model Auditoria {
   userId      String?
   total_pecas Int
 
-  PO         String @default("N/A")
+  PO         String? @default("")
   fornecedor  String  @default("Fornecedor Desconhecido")
   status      String  @default("Pendente")
   data_inicio DateTime  @default(now())
   data_fim    DateTime? @default(now())
-  idExterno   String  @default("SEM_ID")
+  idExterno   String?  @default("SEM_ID")
 
+  modelo_negocio String @default("")
+  pedido      String? @default("")
 
   itens       Item[]
 
