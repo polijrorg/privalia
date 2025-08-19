@@ -45,7 +45,7 @@ export default function LoginScreen() {
       router.replace('/');
 
       setIsLoading(false);
-    }, 1000);
+    }, 10);
 
     /*
     const result = await signIn(email, password);

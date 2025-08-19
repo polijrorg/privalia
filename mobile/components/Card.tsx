@@ -13,7 +13,8 @@ export default function Card(props: CardProps) {
   return (
     <View
       className={
-        'rounded-lg border border-borderPattern bg-foregroundPattern p-6 shadow-sm ' +
+        'rounded-lg border border-borderPattern p-6 shadow-sm ' +
+        (props.color ? ` bg-${props.color} ` : ' bg-foregroundPattern ') +
         props.className
       }>
       {props.children ? (

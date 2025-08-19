@@ -6,7 +6,18 @@ import { Button } from '~/components/Button';
 import { Chip } from '~/components/Chip';
 import Feather from '@expo/vector-icons/Feather';
 
+import { useRouter } from 'expo-router';
+
 export default function Home() {
+  const router = useRouter();
+
+  const handleIniciarNovaAuditoria = () => {
+    // Navega para a tela principal
+    router.push('/novaauditoria');
+
+    console.log('Iniciar nova auditoria');
+  };
+
   return (
     <ScrollView className="flex-1 bg-backgroundPattern p-6" contentContainerStyle={{ flexGrow: 1 }}>
       <Stack.Screen options={{ title: 'Home' }} />
@@ -17,7 +28,7 @@ export default function Home() {
         </View>
         <View>
           <View className="flex-row gap-2">
-            <Chip text="Analista: João Silva" color="backgroundPattern2"></Chip>
+            <Chip text="Analista: João Silva" color="foregroundPattern"></Chip>
             <View className="rounded-full bg-primary p-1">
               <Feather name="user" size={24} color="black" />
             </View>
@@ -30,19 +41,19 @@ export default function Home() {
           <Card title="Auditorias Hoje" value="3"></Card>
         </View>
         <View className="min-w-full flex-1 sm:min-w-[45%] md:min-w-[30%] lg:min-w-[22%]">
-          <Card title="Desvio Médio" value="2.1%" color="primary"></Card>
+          <Card title="Desvio Médio" value="2.1%"></Card>
         </View>
         <View className="min-w-full flex-1 sm:min-w-[45%] md:min-w-[30%] lg:min-w-[22%]">
           <Card title="Itens auditados" value="1,847"></Card>
         </View>
         <View className="min-w-full flex-1 sm:min-w-[45%] md:min-w-[30%] lg:min-w-[22%]">
-          <Card title="Eficiência" value="+38%" color="primary"></Card>
+          <Card title="Eficiência" value="+38%"></Card>
         </View>
       </View>
 
       <View className="w-full flex-1 flex-col gap-2 lg:flex-row">
         <Card className="w-full lg:w-[65%]">
-          <View className="h-[100%] w-full justify-between">
+          <View className="h-auto w-full justify-between">
             <View>
               <Text className="text-2xl font-bold text-white ">Nova auditoria</Text>
               <Text className="text-1xl mb-8 font-bold text-secondary ">
@@ -77,10 +88,13 @@ export default function Home() {
               </View>
             </Card>
 
-            <Button title="Iniciar nova auditoria" iconButton="plus"></Button>
+            <Button
+              title="Iniciar nova auditoria"
+              iconButton="plus"
+              onPress={handleIniciarNovaAuditoria}></Button>
           </View>
         </Card>
-        <View className="w-full flex-1">
+        <View className="h-auto w-full">
           <Card>
             <Text className="mb-8 text-2xl font-bold text-white">Auditorias recentes</Text>
             <View className=" gap-4">

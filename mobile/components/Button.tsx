@@ -58,7 +58,7 @@ export const Button = forwardRef<View, ButtonProps>(
       <TouchableOpacity
         ref={ref}
         {...touchableProps}
-        className={`items-center rounded-xl p-4 shadow-md ${containerClass}`}>
+        className={`align-center items-center justify-center rounded-xl p-4 shadow-md ${containerClass}`}>
         {isLoading ? (
           <ActivityIndicator color="white" />
         ) : (

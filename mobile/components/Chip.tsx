@@ -7,7 +7,7 @@ type ChipProps = {
 
 export const Chip = ({ text, color }: ChipProps) => {
   return (
-    <View className={`rounded-full bg-backgroundPattern2 px-4 py-2 ${color ?? 'primary'}`}>
+    <View className={`rounded-full  px-4 py-2 bg-${color ?? 'primary'}`}>
       <Text className="text-white">{text}</Text>
     </View>
   );
