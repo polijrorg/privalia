@@ -3,7 +3,9 @@ import prisma from '@/backend/services/db';
 import { Auditoria } from '@/generated/prisma';
 
 //create type for auditoria withou id 
-type AuditoriaCreate = Omit<Auditoria, 'id'| 'userId'>;
+type AuditoriaCreate = Omit<Auditoria, 'id' | 'userId' | 'data_inicio' | 'data_fim'> & {
+  data_inicio?: Date;
+};
 
 export async function findAuditoriaById(id: string){
     return await prisma.auditoria.findUnique({
@@ -33,21 +35,7 @@ export async function createAuditoria(data: AuditoriaCreate, userId: string) {
 }
 
 export async function getAuditorias(){
-    return prisma.auditoria.findMany({
-        select: {
-            id: true,
-            name: true,
-            categoria: true,
-            amostra: true,
-            total_pecas: true,
-            user: {
-                select: {
-                    id: true,
-                    name: true,
-                    email: true
-                }
-            }
-        }
+    return prisma.auditoria.findMany({      
     })
 }
 
@@ -63,19 +51,5 @@ export async function updateAuditoria(id: string, data: Partial<AuditoriaCreate>
         data: {
             ...data
         },
-        select: {
-            id: true,
-            name: true,
-            categoria: true,
-            amostra: true,
-            total_pecas: true,
-            user: {
-                select: {
-                    id: true,
-                    name: true,
-                    email: true
-                }
-            }
-        }
     });
 }
