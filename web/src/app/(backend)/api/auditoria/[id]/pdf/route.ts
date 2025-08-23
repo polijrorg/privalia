@@ -1,7 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-//import { returnInvalidDataErrors, validBody, zodErrorHandler } from '@/utils';
-//import { createAuditoriaSchema } from '../../../../schemas/auditoria.schema';
-//import { auth } from '@/auth';
 import { findAuditoriaById } from '../../../../services/auditoria';
 import { gerarAuditoriaPdf } from '@/app/(backend)/services/auditoriaPDF';
 
