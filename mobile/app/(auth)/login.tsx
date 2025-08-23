@@ -12,8 +12,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 export default function LoginScreen() {
   const { signIn, signInWithGoogle, setUser, isLoading: authLoading } = useAuth();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('analista@privalia.com');
+  const [password, setPassword] = useState('analista1234');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -42,7 +42,7 @@ export default function LoginScreen() {
       });
 
       // Navega para a tela principal
-      router.replace('/');
+      router.push('/validaProduto');
 
       setIsLoading(false);
     }, 10);

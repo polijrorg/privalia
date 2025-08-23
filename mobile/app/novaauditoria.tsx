@@ -188,7 +188,7 @@ export default function NovaAuditoria() {
             <View className="flex-row gap-2">
               <Chip text="1" color="primary" />
               <View className="w-full">
-                <Text className="text-xl font-bold text-white">Escaneamento</Text>
+                <Text className="text-1xl font-bold text-white">Escaneamento</Text>
                 <Text className="break-words font-bold text-secondary">
                   Escaneie o código EAN de cada produto usando a câmera do tablet
                 </Text>

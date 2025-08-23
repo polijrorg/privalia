@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
-import { ScrollView, View, Text } from 'react-native';
+import { ScrollView, View, Text, Alert } from 'react-native';
+import { CameraView, Camera, BarcodeScanningResult } from 'expo-camera';
+
 import { Button } from '~/components/Button';
 
 import Card from '~/components/Card';
@@ -7,6 +9,8 @@ import { Input } from '~/components/Input';
 import { ProgressBar } from '~/components/ProgressBar';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import Feather from '@expo/vector-icons/Feather';
+import { set } from 'better-auth';
+import ResponsiveLayout from '~/components/ResponsiveLayout';
 
 export default function () {
   const router = useRouter();
@@ -26,26 +30,49 @@ export default function () {
 
   // código que roda quando essa página é aberta
   useEffect(() => {
-    console.log(processoAuditoria);
     processoAuditoria === 'blocado' ? setMostrarEndereco(true) : setMostrarEndereco(false);
   }, []);
 
-  return (
-    <ScrollView
-      className="flex-1 flex-col bg-backgroundPattern p-20 py-10"
-      contentContainerStyle={{ flexGrow: 1 }}>
-      <View className="mb-5 flex-row gap-5">
-        <Button title="Voltar" onPress={handleVoltar}></Button>
-        <View>
-          <Text className="text-2xl font-bold text-white">Escaneamento</Text>
-          <Text className="text-2xl font-bold text-secondary">{nomeCampanha}</Text>
-        </View>
-      </View>
+  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+  const [scanned, setScanned] = useState(false);
 
-      <View className="flex h-full w-full flex-col gap-4 p-4 lg:flex-row">
-        {/* Coluna 1 - Ocupa 70% em telas grandes */}
-        <View className="w-full lg:w-[70%] ">
-          <Card className="lg:h-[100%]">
+  useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      setHasPermission(status === 'granted');
+    })();
+  }, []);
+
+  if (hasPermission === null) {
+    return <Text>Solicitando permissão...</Text>;
+  }
+  if (hasPermission === false) {
+    return <Text>Sem acesso à câmera</Text>;
+  }
+
+  const onHandleEscanear = () => {
+    router.push('/validaProduto');
+  };
+
+  const handleBarCodeScanned = ({ type, data }: BarcodeScanningResult) => {
+    setScanned(true);
+    setScanner(data);
+  };
+
+  return (
+    <ResponsiveLayout
+      header={
+        <View className="mb-5 flex-row gap-5">
+          <Button title="Voltar" onPress={handleVoltar}></Button>
+          <View>
+            <Text className="text-2xl font-bold text-white">Escaneamento</Text>
+            <Text className="text-2xl font-bold text-secondary">{nomeCampanha}</Text>
+          </View>
+        </View>
+      }
+      left={
+        <>
+          <Card>
             <View className="flex-row gap-5">
               <Feather name="camera" size={30} color="white" />
               <Text className="text-xl font-bold text-white">Scanner EAN</Text>
@@ -53,9 +80,22 @@ export default function () {
             <Text className="text-xl font-bold text-white">
               Escaneie o código de barras ou digite manualmente
             </Text>
-            <Card className="flex-row items-center justify-center gap-2 p-40">
-              <Feather name="camera" size={130} color="white" />
+            <Card className="justify-center align-center" style={{ height: 300 }}>
+              {!scanned &&
+              <CameraView
+                style={{ width: '100%', height: '100%'}}
+                facing="back"
+                barcodeScannerSettings={{
+                  barcodeTypes: ['ean13', 'ean8'],
+                }}
+                onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+              />}
+              {scanned && 
+                <Button title={'Tentar novamente'} onPress={() => setScanned(false)}
+                
+                 />}
             </Card>
+
             <View className="my-4 h-px w-full bg-borderPattern" />
             <View className="w-full flex-row items-center justify-center gap-4">
               <View className="w-[70%]">
@@ -66,7 +106,10 @@ export default function () {
                   onChangeText={setScanner}
                 />
               </View>
-              <Button title="Escanear" className="h-[50%] w-[30%]"></Button>
+              <Button
+                title="Escanear"
+                className="w-[30%]"
+                onPress={onHandleEscanear}></Button>
             </View>
             {mostrarEndereco ? (
               <Input
@@ -85,10 +128,10 @@ export default function () {
             </Text>
             <Text className="text-sm font-bold text-secondary">• 7891234567891 (Calça Jeans)</Text>
           </Card>
-        </View>
-
-        {/* Coluna 2 - Ocupa 30% em telas grandes */}
-        <View className="w-full gap-5 lg:w-[30%]">
+        </>
+      }
+      right={
+        <View className='gap-5 mt-5'>
           <Card>
             <Text className="text-xl font-bold text-white">Progresso da auditoria</Text>
             <ProgressBar total={numeroPecas} current={0}></ProgressBar>
@@ -114,7 +157,7 @@ export default function () {
             </View>
           </Card>
         </View>
-      </View>
-    </ScrollView>
+      }
+    />
   );
 }
