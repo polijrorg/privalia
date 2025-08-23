@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import Handlebars from 'handlebars';
 import puppeteer from 'puppeteer';
-import { Auditoria, Item, Prisma } from '@/generated/prisma';
+import { Prisma } from '@/generated/prisma';
 
 // ✅ Type-safe auditoria with items
 type AuditoriaWithItens = Prisma.AuditoriaGetPayload<{
