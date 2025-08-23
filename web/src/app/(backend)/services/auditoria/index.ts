@@ -11,6 +11,7 @@ export async function findAuditoriaById(id: string){
     return await prisma.auditoria.findUnique({
         where: { id },
         include: {
+        itens: true,
         user: {
             select: {
             id: true,
