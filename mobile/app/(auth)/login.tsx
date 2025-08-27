@@ -31,9 +31,6 @@ export default function LoginScreen() {
     setIsLoading(true);
 
     setTimeout(() => {
-      // Simula login bem-sucedido
-      console.log('Login mockado com sucesso!');
-
       // ⚠️ Mocka o usuário manualmente
       setUser({
         id: '1',

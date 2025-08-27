@@ -5,6 +5,9 @@ import {
   TouchableOpacityProps,
   View,
   ActivityIndicator,
+  StyleProp,
+  ViewStyle,
+  TextStyle
 } from 'react-native';
 import { ButtonType } from '~/types/ButtonTypes';
 
@@ -18,7 +21,11 @@ type ButtonProps = {
   isLoading?: boolean;
   className?: string;
   iconButton?: FeatherIconName;
+  color?: string;
+  styleClass?: StyleProp<ViewStyle>;
+  styleText?: StyleProp<TextStyle>;
 } & TouchableOpacityProps;
+
 
 export const Button = forwardRef<View, ButtonProps>(
   (
@@ -28,12 +35,24 @@ export const Button = forwardRef<View, ButtonProps>(
       iconButton,
       isLoading = false,
       className,
+      color,
+      styleClass,
+      styleText,
       ...touchableProps
     },
     ref
   ) => {
     let containerClass = '';
     let textClass = '';
+
+    if(color === 'sucesso'){
+      styleClass = { backgroundColor: '#23D365' }
+      styleText = { color: '#09351A' }
+    }
+    else if(color === 'erro'){
+      styleClass = { backgroundColor: '#ff0000' }
+      styleText = {color: '#582020'}
+    }
 
     switch (variant) {
       case ButtonType.Text:
@@ -48,7 +67,7 @@ export const Button = forwardRef<View, ButtonProps>(
 
       case ButtonType.Filled:
       default:
-        containerClass = ' bg-primary ';
+        containerClass = ' bg-primary ' + (color ? ` bg-${color} ` : '');
         textClass = ' text-white ';
         break;
     }
@@ -58,7 +77,8 @@ export const Button = forwardRef<View, ButtonProps>(
       <TouchableOpacity
         ref={ref}
         {...touchableProps}
-        className={`align-center items-center justify-center rounded-xl p-4 shadow-md ${containerClass}`}>
+        className={`align-center items-center justify-center rounded-xl p-4 shadow-md ${containerClass}`}
+        style={styleClass}>
         {isLoading ? (
           <ActivityIndicator color="white" />
         ) : (
@@ -66,7 +86,7 @@ export const Button = forwardRef<View, ButtonProps>(
             {iconButton && (
               <Feather name={iconButton} size={16} color="white" className="font-bold" />
             )}
-            <Text className={`text-center text-lg font-semibold ${textClass}`}>{title}</Text>
+            <Text className={`text-center text-lg font-semibold ${textClass}`} style={styleText}>{title}</Text>
           </View>
         )}
       </TouchableOpacity>

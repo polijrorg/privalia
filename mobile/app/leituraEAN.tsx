@@ -22,7 +22,13 @@ export default function () {
   const nomeCampanha = params.nomecampanha; // vai ser string
   const numeroPecas = Number(params.numeropecas); // params vem como string, converta para number
   const processoAuditoria = params.processoAuditoria; // params vem como string, converta para number
+  const [produtosOk, setProdutosOk] = useState(Number(params.produtosOk ?? 0));
+  const [produtosDivergentes, setProdutosDivergentes] = useState(
+    Number(params.produtosDivergentes ?? 0)
+  );
+
   const [mostrarEndereco, setMostrarEndereco] = useState(false);
+  const [produtosAuditados, setProdutosAuditados] = useState(0);
 
   const handleVoltar = () => {
     router.push('/novaauditoria');
@@ -30,6 +36,7 @@ export default function () {
 
   // código que roda quando essa página é aberta
   useEffect(() => {
+    setProdutosAuditados(produtosOk + produtosDivergentes);
     processoAuditoria === 'blocado' ? setMostrarEndereco(true) : setMostrarEndereco(false);
   }, []);
 
@@ -51,7 +58,15 @@ export default function () {
   }
 
   const onHandleEscanear = () => {
-    router.push('/validaProduto');
+    router.push({
+      pathname: '/validaProduto',
+      params: {
+        numeroEAN: scanner,
+        produtosOk: Number(produtosOk),
+        produtoDivergentes: Number(produtosDivergentes),
+        numeropecas: Number(numeroPecas),
+      },
+    });
   };
 
   const handleBarCodeScanned = ({ type, data }: BarcodeScanningResult) => {
@@ -80,20 +95,18 @@ export default function () {
             <Text className="text-xl font-bold text-white">
               Escaneie o código de barras ou digite manualmente
             </Text>
-            <Card className="justify-center align-center" style={{ height: 300 }}>
-              {!scanned &&
-              <CameraView
-                style={{ width: '100%', height: '100%'}}
-                facing="back"
-                barcodeScannerSettings={{
-                  barcodeTypes: ['ean13', 'ean8'],
-                }}
-                onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
-              />}
-              {scanned && 
-                <Button title={'Tentar novamente'} onPress={() => setScanned(false)}
-                
-                 />}
+            <Card className="align-center justify-center" style={{ height: 300 }}>
+              {!scanned && (
+                <CameraView
+                  style={{ width: '100%', height: '100%' }}
+                  facing="back"
+                  barcodeScannerSettings={{
+                    barcodeTypes: ['ean13', 'ean8'],
+                  }}
+                  onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+                />
+              )}
+              {scanned && <Button title={'Tentar novamente'} onPress={() => setScanned(false)} />}
             </Card>
 
             <View className="my-4 h-px w-full bg-borderPattern" />
@@ -106,10 +119,7 @@ export default function () {
                   onChangeText={setScanner}
                 />
               </View>
-              <Button
-                title="Escanear"
-                className="w-[30%]"
-                onPress={onHandleEscanear}></Button>
+              <Button title="Escanear" className="w-[30%]" onPress={onHandleEscanear}></Button>
             </View>
             {mostrarEndereco ? (
               <Input
@@ -131,10 +141,10 @@ export default function () {
         </>
       }
       right={
-        <View className='gap-5 mt-5'>
+        <View className="mt-5 gap-5">
           <Card>
             <Text className="text-xl font-bold text-white">Progresso da auditoria</Text>
-            <ProgressBar total={numeroPecas} current={0}></ProgressBar>
+            <ProgressBar total={numeroPecas} current={produtosAuditados}></ProgressBar>
             <View className="flex-row justify-around">
               <Card
                 color="sucess"

@@ -16,7 +16,9 @@ module.exports = {
         backgroundPattern2: '#262626', // cinza
         foregroundPattern: '#1A1A1A', // cinza
         borderPattern: '#2B2B2B', // cinza
-        success: '#23D365', // verde
+        sucesso: '#23D365', // verde
+        erro: '#ff0000',
+        alerta: '#995910',
       },
     },
   },
