@@ -34,6 +34,10 @@ export default function ValidaProduto() {
     });
   };
 
+  const handleProdutoDivergente = () => {
+    router.push('/divergencia')
+  }
+
   const handleBarCodeScanned = ({ type, data }: BarcodeScanningResult) => {
     console.log(type, data);
     setScanned(true);
@@ -103,7 +107,7 @@ export default function ValidaProduto() {
 
           <View className="my-5 flex-row items-center justify-around">
             <Button onPress={handleProdutoOk} title="Produto OK" color="sucesso" />
-            <Button onPress={() => {}} title="Divergência" color="erro" />
+            <Button onPress={handleProdutoDivergente} title="Divergência" color="erro" />
           </View>
 
           <Card>

@@ -9,7 +9,6 @@ import { Input } from '~/components/Input';
 import { ProgressBar } from '~/components/ProgressBar';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import Feather from '@expo/vector-icons/Feather';
-import { set } from 'better-auth';
 import ResponsiveLayout from '~/components/ResponsiveLayout';
 
 export default function () {
