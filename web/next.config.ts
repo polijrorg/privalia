@@ -9,11 +9,17 @@ const nextConfig: NextConfig = {
       },
     },
   },
-  webpack(config) {
+  webpack(config, { isServer }) {
     config.module.rules.push({
       test: /\.svg$/i,
       use: ['@svgr/webpack'],
     });
+
+    if (isServer) {
+      // Ignorar libs que só funcionam no Node.js
+      config.externals.push('handlebars', 'fs', 'path', 'puppeteer');
+    }
+
     return config;
   },
   async rewrites() {
