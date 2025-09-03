@@ -18,7 +18,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
         const pdfBuffer = await gerarAuditoriaPdf(auditoria);
 
-        return new NextResponse(pdfBuffer, {
+        return new NextResponse(pdfBuffer as BodyInit | null | undefined, {
             status: 200,
             headers: {
                 'Content-Type': 'application/pdf',
