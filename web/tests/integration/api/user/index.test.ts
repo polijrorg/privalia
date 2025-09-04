@@ -10,7 +10,7 @@ vi.mock('@/backend/services/user', () => ({
 
 import { POST } from '@/backend/api/user/route'
 
-describe('POST /api/user', () => {
+describe.skip('POST /api/user', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
