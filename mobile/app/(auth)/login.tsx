@@ -8,14 +8,20 @@ import { isValidEmail, isValidPassword } from '~/Utils/ValidaCampos';
 
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
+import { ButtonType } from '~/types/ButtonTypes';
+import { Typography } from '~/Utils/Tipografia';
 
 export default function LoginScreen() {
-  const { signIn, signInWithGoogle, setUser, isLoading: authLoading } = useAuth();
+  const { setUser, isLoading: authLoading } = useAuth();
 
   const [email, setEmail] = useState('analista@privalia.com');
   const [password, setPassword] = useState('analista1234');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+
+  const handleCadastro = () => {
+    router.push('/cadastro');
+  };
 
   const handleLogin = async () => {
     if (!isValidEmail(email)) {
@@ -39,7 +45,7 @@ export default function LoginScreen() {
       });
 
       // Navega para a tela principal
-      router.push('/validaProduto');
+      router.push('/');
 
       setIsLoading(false);
     }, 10);
@@ -78,8 +84,8 @@ export default function LoginScreen() {
             <Text className="text-xl font-bold text-white">P</Text>
           </View>
         </View>
-        <Text className="mt-5 text-center text-2xl font-bold text-white">Auditoria Logística</Text>
-        <Text className="text-1xl mt-5 text-center font-bold text-secondary">Privalia</Text>
+        <Text className={Typography.Titulo1 + 'text-center'}>Auditoria Logística</Text>
+        <Text className={Typography.Subtitulo1 + 'mb-5 text-center'}>Privalia</Text>
 
         <Input
           label="Email"
@@ -101,8 +107,15 @@ export default function LoginScreen() {
           className="mb-4"
           isLoading={isLoading}></Button>
 
+        <Button
+          onPress={handleCadastro}
+          title="Solicitar cadastro"
+          variant={ButtonType.Text}
+          color="secondary"
+        />
+
         <View className="flex-row justify-center text-secondary">
-          <Text className="text-secondary">Versão 1.0 • Ambiente de Produção </Text>
+          <Text className={Typography.Subtitulo3}>Versão 1.0 • Ambiente de Produção </Text>
         </View>
       </View>
     </LinearGradient>

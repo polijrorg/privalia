@@ -7,11 +7,12 @@ import {
   ActivityIndicator,
   StyleProp,
   ViewStyle,
-  TextStyle
+  TextStyle,
 } from 'react-native';
 import { ButtonType } from '~/types/ButtonTypes';
 
 import Feather from '@expo/vector-icons/Feather';
+import { Typography } from '~/Utils/Tipografia';
 
 type FeatherIconName = keyof typeof Feather.glyphMap;
 
@@ -25,7 +26,6 @@ type ButtonProps = {
   styleClass?: StyleProp<ViewStyle>;
   styleText?: StyleProp<TextStyle>;
 } & TouchableOpacityProps;
-
 
 export const Button = forwardRef<View, ButtonProps>(
   (
@@ -45,19 +45,19 @@ export const Button = forwardRef<View, ButtonProps>(
     let containerClass = '';
     let textClass = '';
 
-    if(color === 'sucesso'){
-      styleClass = { backgroundColor: '#23D365' }
-      styleText = { color: '#09351A' }
-    }
-    else if(color === 'erro'){
-      styleClass = { backgroundColor: '#ff0000' }
-      styleText = {color: '#582020'}
+    if (color === 'sucesso') {
+      styleClass = { backgroundColor: '#23D365' };
+      styleText = { color: '#09351A' };
+    } else if (color === 'erro') {
+      styleClass = { backgroundColor: '#ff0000' };
+      styleText = { color: '#fff' };
     }
 
     switch (variant) {
       case ButtonType.Text:
         containerClass = ' bg-transparent ';
         textClass = ' text-primary ';
+        color = color ? (textClass += ` text-${color} `) : '';
         break;
 
       case ButtonType.Outlined:
@@ -70,6 +70,11 @@ export const Button = forwardRef<View, ButtonProps>(
         containerClass = ' bg-primary ' + (color ? ` bg-${color} ` : '');
         textClass = ' text-white ';
         break;
+    }
+
+    // aplica classe extra se estiver desabilitado
+    if (touchableProps.disabled) {
+      containerClass += ' opacity-50 ';
     }
 
     containerClass += className;
@@ -86,12 +91,12 @@ export const Button = forwardRef<View, ButtonProps>(
             {iconButton && (
               <Feather name={iconButton} size={16} color="white" className="font-bold" />
             )}
-            <Text className={`text-center text-lg font-semibold ${textClass}`} style={styleText}>{title}</Text>
+            <Text className={`text-center ${textClass + Typography.Titulo2}`} style={styleText}>
+              {title}
+            </Text>
           </View>
         )}
       </TouchableOpacity>
     );
   }
 );
-
-Button.displayName = 'Button';

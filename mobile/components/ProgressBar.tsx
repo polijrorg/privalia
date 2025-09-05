@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import { Typography } from '~/Utils/Tipografia';
 
 type ProgressBarProps = {
   total: number;
@@ -12,8 +13,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ total, current }) => {
   return (
     <View className="w-full rounded-md p-4">
       <View className="mb-1 flex-row justify-between">
-        <Text className="text-sm text-white">Itens Auditados</Text>
-        <Text className="text-sm text-white">
+        <Text className={Typography.Titulo3}>Itens Auditados</Text>
+        <Text className={Typography.Titulo3}>
           {current} / {total}
         </Text>
       </View>
@@ -22,7 +23,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ total, current }) => {
         <View className="h-full rounded-full bg-green-500" style={{ width: `${percentage}%` }} />
       </View>
 
-      <Text className="mt-1 text-xs text-gray-400">{total - current} itens restantes</Text>
+      <Text className={Typography.Titulo3}>{total - current} itens restantes</Text>
     </View>
   );
 };

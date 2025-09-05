@@ -1,6 +1,7 @@
 import { forwardRef, useState } from 'react';
 import { View, Text, TextInput, TextInputProps } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import { Typography } from '~/Utils/Tipografia';
 
 export type Option = { label: string; value: string };
 
@@ -13,6 +14,7 @@ type InputProps = {
   onSelectChange?: (value: string) => void;
   className?: string;
   placeholder?: string;
+  textArea?: number;
 } & TextInputProps;
 
 export const Input = forwardRef<View, InputProps>(
@@ -26,6 +28,7 @@ export const Input = forwardRef<View, InputProps>(
       onSelectChange,
       className = '',
       placeholder = '',
+      textArea,
       ...props
     },
     ref
@@ -39,7 +42,7 @@ export const Input = forwardRef<View, InputProps>(
 
     return (
       <View className={`mb-6 ${className}`}>
-        {label && <Text className="mb-2 font-semibold text-white">{label}</Text>}
+        {label && <Text className={Typography.Titulo3 + 'mb-2 '}>{label}</Text>}
 
         {type === 'text' ? (
           <TextInput
@@ -49,14 +52,16 @@ export const Input = forwardRef<View, InputProps>(
             onChangeText={onChangeText}
             placeholderTextColor={'#808A95'}
             placeholder={placeholder}
+            multiline={textArea ? true : false}
+            numberOfLines={textArea ? textArea : undefined}
             {...props}
           />
         ) : (
-          <View className="w-full rounded-xl border border-gray-300 bg-foregroundPattern px-2">
+          <View className="w-full rounded-xl border border-gray-300 bg-foregroundPattern px-1">
             <Picker
               selectedValue={selected}
               onValueChange={handleSelectChange}
-              style={{ color: 'white' }}>
+              style={{ color: 'white', padding: 0, borderRadius: 16 }}>
               {options.map((opt) => (
                 <Picker.Item key={opt.value} label={opt.label} value={opt.value} />
               ))}

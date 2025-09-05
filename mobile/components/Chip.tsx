@@ -1,14 +1,17 @@
 import { View, Text } from 'react-native';
+import { cores } from '~/Utils/cores';
 
 type ChipProps = {
   text: string;
-  color?: string;
+  color?: (typeof cores)[keyof typeof cores];
 };
 
-export const Chip = ({ text, color }: ChipProps) => {
+export const Chip = ({ text, color = 'primary' }: ChipProps) => {
   return (
-    <View className={`rounded-full  px-4 py-2 justify-center bg-${color ?? 'primary'}`}>
-      <Text className="text-white">{text}</Text>
+    <View
+      className={'justify-center rounded-full px-4 py-2'}
+      style={color && { backgroundColor: color }}>
+      <Text className="font-bold text-white">{text}</Text>
     </View>
   );
 };
