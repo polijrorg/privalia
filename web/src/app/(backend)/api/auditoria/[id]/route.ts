@@ -4,9 +4,9 @@ import { returnInvalidDataErrors, validBody } from "@/utils/api";
 import { deleteAuditoria, updateAuditoria } from "@/app/(backend)/services/auditoria";
 import { patchAuditoriaSchema } from "@/app/(backend)/schemas/auditoria.schema";
 
-export async function DELETE(request: NextRequest, { params}: { params: { id: string}}) {
+export async function DELETE(request: NextRequest, { params}: { params: Promise<{ id: string}>}) {
     try {
-        const auditoriaId = params.id;
+        const { id: auditoriaId } = await params 
         
         if (!auditoriaId) {
             return NextResponse.json(
@@ -36,9 +36,9 @@ export async function DELETE(request: NextRequest, { params}: { params: { id: st
     }
 }
 
-export async function PUT(request: NextRequest, { params}: {params: { id: string } }) {
+export async function PUT(request: NextRequest, { params}: {params: Promise<{ id: string }> }) {
     try {
-        const auditoriaId = params.id;
+        const { id: auditoriaId } = await params 
         if (!auditoriaId) {
             return NextResponse.json(
                 { error: "ID da auditoria não fornecido" },

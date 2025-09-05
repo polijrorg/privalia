@@ -1,7 +1,29 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import prisma from '@/backend/services/db';
+import { Auditoria } from '@/generated/prisma';
 
-export async function createAuditoria(data: any, userId: string) {
+//create type for auditoria withou id 
+type AuditoriaCreate = Omit<Auditoria, 'id' | 'userId' | 'data_inicio' | 'data_fim'> & {
+  data_inicio?: Date;
+};
+
+export async function findAuditoriaById(id: string){
+    return await prisma.auditoria.findUnique({
+        where: { id },
+        include: {
+        itens: true,
+        user: {
+            select: {
+            id: true,
+            name: true,
+            email: true
+            }
+        }
+        }
+    });
+}
+
+export async function createAuditoria(data: AuditoriaCreate, userId: string) {
   return prisma.auditoria.create({
     data: {
       ...data,
@@ -14,21 +36,7 @@ export async function createAuditoria(data: any, userId: string) {
 }
 
 export async function getAuditorias(){
-    return prisma.auditoria.findMany({
-        select: {
-            id: true,
-            name: true,
-            categoria: true,
-            amostra: true,
-            total_pecas: true,
-            user: {
-                select: {
-                    id: true,
-                    name: true,
-                    email: true
-                }
-            }
-        }
+    return prisma.auditoria.findMany({      
     })
 }
 
@@ -38,25 +46,11 @@ export async function deleteAuditoria(id: string) {
     });
 }
 
-export async function updateAuditoria(id: string, data: any) {
+export async function updateAuditoria(id: string, data: Partial<AuditoriaCreate>) {
     return await prisma.auditoria.update({
         where: { id },
         data: {
             ...data
         },
-        select: {
-            id: true,
-            name: true,
-            categoria: true,
-            amostra: true,
-            total_pecas: true,
-            user: {
-                select: {
-                    id: true,
-                    name: true,
-                    email: true
-                }
-            }
-        }
     });
 }

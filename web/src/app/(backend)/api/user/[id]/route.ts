@@ -4,9 +4,9 @@ import { updateUserSchema } from "@/backend/schemas";
 import { returnInvalidDataErrors, validBody, zodErrorHandler } from "@/utils/api";
 import { deleteUser, updateUser } from "@/app/(backend)/services/user";
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const userId = params.id;
+    const {id: userId} = await params;
 
     if (!userId) {
       return NextResponse.json(
@@ -37,9 +37,9 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
   }
 }
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const userId = params.id;
+    const {id: userId} = await params;
 
     if (!userId) {
       return NextResponse.json(

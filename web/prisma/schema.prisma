@@ -21,13 +21,14 @@ model User {
   id            String    @id @default(uuid()) @map("_id")
   name          String
   email         String    @unique
-  password      String?
   emailVerified Boolean?
   image         String?
   role          Role      @default(USER)
   // < nao mexer 
 
   auditorias Auditoria[]
+  itens       Item[]
+
 
   userCursos UserCurso[] // Cursos que o user tá cursando
   createdAt  DateTime
@@ -199,4 +200,35 @@ model Auditoria {
   user        User?   @relation(fields: [userId], references: [id])
   userId      String?
   total_pecas Int
+
+  PO         String? @default("")
+  fornecedor  String  @default("Fornecedor Desconhecido")
+  status      String  @default("Pendente")
+  data_inicio DateTime  @default(now())
+  data_fim    DateTime? @default(now())
+  idExterno   String?  @default("SEM_ID")
+
+  modelo_negocio String @default("")
+  pedido      String? @default("")
+
+  itens       Item[]
+
+}
+
+model Item {
+  id                  String    @id @default(uuid()) @map("_id")
+
+  auditId            String
+  auditoria           Auditoria   @relation(fields: [auditId], references: [id], onDelete: Cascade)
+
+  user        User?   @relation(fields: [userId], references: [id])
+  userId      String?
+
+  ean                 String
+  resultado           String
+  divergencia         String
+  imagem_divergente   String
+
+  data                DateTime  @default(now())  
+  endereco_fisico     String  @default("Local não informado")
 }

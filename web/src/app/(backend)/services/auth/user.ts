@@ -1,4 +1,3 @@
-import { comparePassword } from "./password";
 import prisma from "../db";
 
 export async function getUserRole(userId: string) {
@@ -10,12 +9,10 @@ export async function getUserRole(userId: string) {
     return user?.role;
 }
 
-export async function getUserByEmail(email: string, plainPassword: string) {
+export async function getUserByEmail(email: string) {
   const user = await prisma.user.findUnique({ where: { email } });
-  if (!user || !user.password) return null;
+  if (!user) return null;
 
-  const isValid = await comparePassword(plainPassword, user.password);
-  if (!isValid) return null;
   return user;
 }
 
