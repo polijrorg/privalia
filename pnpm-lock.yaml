@@ -4,6 +4,12 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  mobile>react: 19.0.0
+  mobile>react-dom: 19.0.0
+  web>react: 19.1.1
+  web>react-dom: 19.1.1
+
 importers:
 
   .:
