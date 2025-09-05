@@ -1,61 +1,73 @@
 import { useState, useEffect } from 'react';
-import { CameraView, Camera, BarcodeScanningResult } from 'expo-camera';
-import { ImageBackground, Text, View } from 'react-native';
+import { Alert, Text, View } from 'react-native';
 import Card from '~/components/Card';
 import ResponsiveLayout from '~/components/ResponsiveLayout';
 import { Header } from '~/components/Header';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Button } from '~/components/Button';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as LocalStorageModels from '~/types/LocalStorageModels';
+import { Typography } from '~/Utils/Tipografia';
 
 export default function ValidaProduto() {
   const router = useRouter();
   const params = useLocalSearchParams();
-  const [scanned, setScanned] = useState(false);
-  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-
-  // Parametros
   const numeroEAN = Number(params.numeroEAN); // params vem como string, converta para number
-  const produtosOk = Number(params.produtosOk ?? 0);
-  const produtosDivergentes = Number(params.produtosDivergentes ?? 0);
-  const numeropecas = Number(params.numeropecas ?? 0);
+
+  const [campanha, setCampanha] = useState<LocalStorageModels.Campanha | null>(null);
 
   const handleVoltar = () => {
     router.push('/leituraEAN');
   };
 
-  const handleProdutoOk = () => {
+  const handleProdutoOk = async () => {
+    // Se não tiver campanha não é possível validar
+    if (!campanha) return;
+
+    // Atualiza o valor aprovados
+    const updated = {
+      ...campanha,
+      aprovados: campanha.aprovados + 1,
+      itensAuditados: campanha.itensAuditados + 1,
+    };
+
+    // Atualiza na memoria
+    await AsyncStorage.setItem('campanha', JSON.stringify(updated));
+
+    router.push('/leituraEAN');
+  };
+
+  const handleProdutoDivergente = () => {
     router.push({
-      pathname: '/leituraEAN',
+      pathname: '/divergencia',
       params: {
-        produtosOk: produtosOk + 1,
-        produtosDivergentes,
-        numeropecas,
+        numeroEAN: numeroEAN,
       },
     });
   };
 
-  const handleProdutoDivergente = () => {
-    router.push('/divergencia')
-  }
-
-  const handleBarCodeScanned = ({ type, data }: BarcodeScanningResult) => {
-    console.log(type, data);
-    setScanned(true);
-  };
-
+  // TODO: Verificar o fluxo ao negar permissão de câmera
   useEffect(() => {
-    (async () => {
-      const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(status === 'granted');
-    })();
-  }, []);
+    const loadCampanha = async () => {
+      try {
+        const data = await AsyncStorage.getItem('campanha');
 
-  if (hasPermission === null) {
-    return <Text>Solicitando permissão...</Text>;
-  }
-  if (hasPermission === false) {
-    return <Text>Sem acesso à câmera</Text>;
-  }
+        // Se não houver dados
+        if (!data) {
+          Alert.alert('Erro ao carregar dados', 'Tente novamente mais tarde.');
+          router.push('/novaauditoria');
+          return;
+        }
+
+        setCampanha(JSON.parse(data));
+      } catch {
+        Alert.alert('Erro ao carregar dados', 'Tente novamente mais tarde.');
+        router.push('/novaauditoria');
+      }
+    };
+
+    loadCampanha(); // chama a função assíncrona
+  }, [router]);
 
   return (
     <ResponsiveLayout
@@ -68,8 +80,8 @@ export default function ValidaProduto() {
           />
 
           <Card>
-            <Text className="text-white">{`Produto ${numeroEAN}`}</Text>
-            <Text className="text-secondary">{`Código EAN: ${numeroEAN}`}</Text>
+            <Text className={Typography.Titulo2}>{`Produto ${numeroEAN}`}</Text>
+            <Text className={Typography.Subtitulo2}>{`Código EAN: ${numeroEAN}`}</Text>
           </Card>
         </>
       }
@@ -77,58 +89,62 @@ export default function ValidaProduto() {
         <>
           <Card>
             <View className="mb-5 items-center justify-center">
-              <Text className="text-white">Produto esperado (Sistema)</Text>
+              <Text className={Typography.Titulo1}>Produto esperado (Sistema)</Text>
             </View>
             <View className="items-center justify-center">
               <Card className="mb-5 w-full" style={{ height: 300 }}></Card>
             </View>
             <View>
               <View className="w-full flex-row justify-between">
-                <Text className="text-secondary">Produto</Text>
-                <Text className="text-white">{`Produto ${numeroEAN}`}</Text>
+                <Text className={Typography.Subtitulo2}>Produto</Text>
+                <Text className={Typography.Titulo2}>{`Produto ${numeroEAN}`}</Text>
               </View>
               <View className="w-full flex-row justify-between">
-                <Text className="text-secondary">Marca</Text>
-                <Text className="text-white">{`Produto genérico`}</Text>
+                <Text className={Typography.Subtitulo2}>Marca</Text>
+                <Text className={Typography.Titulo2}>{`Produto genérico`}</Text>
               </View>
               <View className="w-full flex-row justify-between">
-                <Text className="text-secondary">EAN</Text>
-                <Text className="text-white">{`EAN ${numeroEAN}`}</Text>
+                <Text className={Typography.Subtitulo2}>EAN</Text>
+                <Text className={Typography.Titulo2}>{`EAN ${numeroEAN}`}</Text>
               </View>
             </View>
           </Card>
           <Card className=" my-5 " style={{ backgroundColor: '#995910' }}>
-            <Text className="mb-2 text-white">Pontos de Verificação:</Text>
-            <Text className="text-white">• Estado da embalagem</Text>
-            <Text className="text-white">• Produto correto</Text>
-            <Text className="text-white">• Presença de danos</Text>
-            <Text className="text-white">• Etiquetas e adesivos</Text>
+            <Text className={Typography.Titulo2 + ' mb-2 text-center'}>Pontos de Verificação:</Text>
+            <Text className={Typography.Titulo3}>• Estado da embalagem</Text>
+            <Text className={Typography.Titulo3}>• Produto correto</Text>
+            <Text className={Typography.Titulo3}>• Presença de danos</Text>
+            <Text className={Typography.Titulo3}>• Etiquetas e adesivos</Text>
           </Card>
 
           <View className="my-5 flex-row items-center justify-around">
-            <Button onPress={handleProdutoOk} title="Produto OK" color="sucesso" />
+            <Button onPress={() => handleProdutoOk()} title="Produto OK" color="sucesso" />
             <Button onPress={handleProdutoDivergente} title="Divergência" color="erro" />
           </View>
 
           <Card>
             <View className="flex-row">
               <View className="w-[50%] ">
-                <Text className="text-sucesso text-center" style={{ color: '#23D365' }}>
+                <Text className={Typography.Titulo1 + ' text-center'} style={{ color: '#23D365' }}>
                   Aprovar se:
                 </Text>
-                <Text className="text-center text-white">• Produto corresponde à imagem</Text>
-                <Text className="text-center text-white">• Embalagem íntegra</Text>
-                <Text className="text-center text-white">• Sem danos visíveis</Text>
-                <Text className="text-center text-white">• Etiquetas corretas</Text>
+                <Text className={Typography.Titulo2 + ' text-center'}>
+                  • Produto corresponde à imagem
+                </Text>
+                <Text className={Typography.Titulo2 + ' text-center'}>• Embalagem íntegra</Text>
+                <Text className={Typography.Titulo2 + ' text-center'}>• Sem danos visíveis</Text>
+                <Text className={Typography.Titulo2 + ' text-center'}>• Etiquetas corretas</Text>
               </View>
               <View className="w-[50%] ">
-                <Text className="text-center text-white" style={{ color: '#ff0000' }}>
+                <Text className={Typography.Titulo1 + ' text-center'} style={{ color: '#ff0000' }}>
                   Rejeitar se:
                 </Text>
-                <Text className="text-center text-white">• Produto errado/diferente</Text>
-                <Text className="text-center text-white">• Embalagem danificada</Text>
-                <Text className="text-center text-white">• Item sujo ou manchado</Text>
-                <Text className="text-center text-white">• Faltam componentes</Text>
+                <Text className={Typography.Titulo2 + ' text-center'}>
+                  • Produto errado/diferente
+                </Text>
+                <Text className={Typography.Titulo2 + ' text-center'}>• Embalagem danificada</Text>
+                <Text className={Typography.Titulo2 + ' text-center'}>• Item sujo ou manchado</Text>
+                <Text className={Typography.Titulo2 + ' text-center'}>• Faltam componentes</Text>
               </View>
             </View>
           </Card>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ScrollView, View, Text, Alert } from 'react-native';
+import { View, Text, Alert } from 'react-native';
 import { CameraView, Camera, BarcodeScanningResult } from 'expo-camera';
 
 import { Button } from '~/components/Button';
@@ -7,27 +7,24 @@ import { Button } from '~/components/Button';
 import Card from '~/components/Card';
 import { Input } from '~/components/Input';
 import { ProgressBar } from '~/components/ProgressBar';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useRouter } from 'expo-router';
 import Feather from '@expo/vector-icons/Feather';
 import ResponsiveLayout from '~/components/ResponsiveLayout';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as LocalStorageModels from '~/types/LocalStorageModels';
+import { Header } from '~/components/Header';
+import { Typography } from '~/Utils/Tipografia';
 
 export default function () {
   const router = useRouter();
 
+  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+  const [scanned, setScanned] = useState(false);
+
   const [endereco, setEndereco] = useState('');
   const [scanner, setScanner] = useState('');
-  const params = useLocalSearchParams();
-
-  const nomeCampanha = params.nomecampanha; // vai ser string
-  const numeroPecas = Number(params.numeropecas); // params vem como string, converta para number
-  const processoAuditoria = params.processoAuditoria; // params vem como string, converta para number
-  const [produtosOk, setProdutosOk] = useState(Number(params.produtosOk ?? 0));
-  const [produtosDivergentes, setProdutosDivergentes] = useState(
-    Number(params.produtosDivergentes ?? 0)
-  );
-
   const [mostrarEndereco, setMostrarEndereco] = useState(false);
-  const [produtosAuditados, setProdutosAuditados] = useState(0);
+  const [campanha, setCampanha] = useState<LocalStorageModels.Campanha | null>(null);
 
   const handleVoltar = () => {
     router.push('/novaauditoria');
@@ -35,19 +32,42 @@ export default function () {
 
   // código que roda quando essa página é aberta
   useEffect(() => {
-    setProdutosAuditados(produtosOk + produtosDivergentes);
-    processoAuditoria === 'blocado' ? setMostrarEndereco(true) : setMostrarEndereco(false);
-  }, []);
+    const loadData = async () => {
+      try {
+        const data = await AsyncStorage.getItem('campanha');
 
-  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [scanned, setScanned] = useState(false);
+        // Se não houver dados
+        if (!data) {
+          Alert.alert('Erro ao carregar dados', 'Tente novamente mais tarde.');
+          router.push('/novaauditoria');
+          return;
+        }
 
-  useEffect(() => {
+        // Converte o JSON para um objeto (como o setcampanha e assincrono, pode
+        //ocorrer problema na renderização do input de endereco)
+        const parsed = JSON.parse(data);
+
+        setCampanha(parsed);
+
+        // Utiliza o objeto parsed porque o usestate funciona de forma assincrona
+        if (parsed.processoAuditado === 'blocado') {
+          setMostrarEndereco(true);
+        } else {
+          setMostrarEndereco(false);
+        }
+      } catch {
+        Alert.alert('Erro ao carregar dados', 'Tente novamente mais tarde.');
+        router.push('/novaauditoria');
+      }
+    };
+
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
       setHasPermission(status === 'granted');
     })();
-  }, []);
+
+    loadData();
+  }, [router, mostrarEndereco]);
 
   if (hasPermission === null) {
     return <Text>Solicitando permissão...</Text>;
@@ -57,13 +77,20 @@ export default function () {
   }
 
   const onHandleEscanear = () => {
+    if (scanner.trim() === '') {
+      Alert.alert('Erro', 'Preencha o código EAN');
+      return;
+    }
+
+    if (endereco.trim() === '' && campanha?.processoAuditado === 'blocado') {
+      Alert.alert('Erro', 'Preencha o endereço');
+      return;
+    }
+
     router.push({
       pathname: '/validaProduto',
       params: {
         numeroEAN: scanner,
-        produtosOk: Number(produtosOk),
-        produtoDivergentes: Number(produtosDivergentes),
-        numeropecas: Number(numeroPecas),
       },
     });
   };
@@ -73,25 +100,27 @@ export default function () {
     setScanner(data);
   };
 
+  const handleScannerChange = (text: string) => {
+    const numericValue = text.replace(/[^0-9]/g, '');
+    setScanner(numericValue);
+  };
+
   return (
     <ResponsiveLayout
       header={
-        <View className="mb-5 flex-row gap-5">
-          <Button title="Voltar" onPress={handleVoltar}></Button>
-          <View>
-            <Text className="text-2xl font-bold text-white">Escaneamento</Text>
-            <Text className="text-2xl font-bold text-secondary">{nomeCampanha}</Text>
-          </View>
-        </View>
+        <Header
+          titulo="Escaneamento"
+          onHandleVoltar={handleVoltar}
+          subTitulo={campanha?.nome ?? ''}></Header>
       }
       left={
         <>
           <Card>
-            <View className="flex-row gap-5">
+            <View className="flex-row items-center gap-5">
               <Feather name="camera" size={30} color="white" />
-              <Text className="text-xl font-bold text-white">Scanner EAN</Text>
+              <Text className={Typography.Titulo1}>Scanner EAN</Text>
             </View>
-            <Text className="text-xl font-bold text-white">
+            <Text className={Typography.Subtitulo2 + ' mb-5'}>
               Escaneie o código de barras ou digite manualmente
             </Text>
             <Card className="align-center justify-center" style={{ height: 300 }}>
@@ -100,7 +129,7 @@ export default function () {
                   style={{ width: '100%', height: '100%' }}
                   facing="back"
                   barcodeScannerSettings={{
-                    barcodeTypes: ['ean13', 'ean8'],
+                    barcodeTypes: ['ean13', 'ean8', 'qr'],
                   }}
                   onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
                 />
@@ -114,8 +143,9 @@ export default function () {
                 <Input
                   label="Código EAN manual"
                   placeholder="Digite o código EAN"
+                  keyboardType="numeric"
                   value={scanner}
-                  onChangeText={setScanner}
+                  onChangeText={handleScannerChange}
                 />
               </View>
               <Button title="Escanear" className="w-[30%]" onPress={onHandleEscanear}></Button>
@@ -125,44 +155,42 @@ export default function () {
                 label="Endereço (13 dígitos)"
                 placeholder="Digite o endereço"
                 value={endereco}
-                onChangeText={() => setEndereco(endereco)}
+                onChangeText={setEndereco}
               />
             ) : (
               ''
             )}
 
-            <Text className="text-sm font-bold text-white">Códigos de teste:</Text>
-            <Text className="text-sm font-bold text-secondary">
-              • 7891234567890 (Camiseta Preta)
-            </Text>
-            <Text className="text-sm font-bold text-secondary">• 7891234567891 (Calça Jeans)</Text>
+            <Text className={Typography.Titulo3}>Códigos de teste:</Text>
+            <Text className={Typography.Subtitulo3}>• 7891234567890 (Camiseta Preta)</Text>
+            <Text className={Typography.Subtitulo3}>• 7891234567891 (Calça Jeans)</Text>
           </Card>
         </>
       }
       right={
         <View className="mt-5 gap-5">
           <Card>
-            <Text className="text-xl font-bold text-white">Progresso da auditoria</Text>
-            <ProgressBar total={numeroPecas} current={produtosAuditados}></ProgressBar>
+            <Text className={Typography.Titulo1}>Progresso da auditoria</Text>
+            <ProgressBar
+              total={campanha?.amostragem ?? 0}
+              current={campanha?.itensAuditados ?? 0}></ProgressBar>
             <View className="flex-row justify-around">
               <Card
                 color="sucess"
                 className="flex flex-col items-center justify-center bg-green-500">
-                <Text className="text-sucess text-lg font-bold">0</Text>
-                <Text className="text-sucess text-lg font-bold">Aprovados</Text>
+                <Text className={Typography.Titulo1}>{campanha?.aprovados}</Text>
+                <Text className={Typography.Titulo1}>Aprovados</Text>
               </Card>
               <Card color="sucess" className="flex flex-col items-center justify-center bg-red-500">
-                <Text className="text-error text-lg font-bold">0</Text>
-                <Text className="text-error text-lg font-bold">Reprovados</Text>
+                <Text className={Typography.Titulo1}>{campanha?.divergencias}</Text>
+                <Text className={Typography.Titulo1}>Reprovados</Text>
               </Card>
             </View>
           </Card>
           <Card>
-            <Text className="text-xl font-bold text-white">Últimos itens</Text>
+            <Text className={Typography.Titulo1 + ' mb-5'}>Últimos itens</Text>
             <View className="align-center flex justify-center">
-              <Text className="m-5 text-xl font-bold text-secondary">
-                Nenhum item escaneado ainda
-              </Text>
+              <Text className={Typography.Subtitulo1}>Nenhum item escaneado ainda</Text>
             </View>
           </Card>
         </View>
